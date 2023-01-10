@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Auth\AuthenticationException;
 
 class RegisterController extends Controller
 {
@@ -51,6 +54,7 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+
         return Validator::make($data, [
             'JMBG' => ['required', 'string', 'min:13', 'max:13', 'unique:users'],
             'role' => ['required', 'string', 'max:255', Rule::in(['teacher', 'student'])],
@@ -60,7 +64,7 @@ class RegisterController extends Controller
             'birth_place' => ['required', 'string', 'max:255'],
             'birth_country' => ['required', 'string', 'max:255'],
             'birth_date' => ['required', 'date'],
-            'mobile_number' => ['required', 'string', 'max:255'],
+            'fullNum' => ['required', 'string', 'min:10', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -84,7 +88,11 @@ class RegisterController extends Controller
             $username = $username . (count($similarUsernames) + 1);
         }
 
-        return User::create([
+        Session::flash('success', 'You have successfully registered! Now, you must wait for the Admin to approve your registration request');
+
+
+
+        $user = User::create([
             'JMBG' => $data['JMBG'],
             'role_id' => $roleId,
             'name' => $data['name'],
@@ -94,9 +102,13 @@ class RegisterController extends Controller
             'birth_place' => $data['birth_place'],
             'birth_country' => $data['birth_country'],
             'birth_date' => $data['birth_date'],
-            'mobile_number' => $data['mobile_number'],
+            'mobile_number' => $data['fullNum'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
+
+        event(new Registered($user));
+
+        throw new AuthenticationException();
     }
 }

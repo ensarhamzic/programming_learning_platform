@@ -33,6 +33,7 @@ class User extends Authenticatable
         'image_url',
         'email',
         'password',
+        'approved'
     ];
 
     public function role()

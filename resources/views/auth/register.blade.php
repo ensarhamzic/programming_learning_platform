@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+
+@section('options')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -8,7 +14,7 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form id="regForm" method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -160,11 +166,13 @@
                             </div>
                         </div>
 
+                        <input type="hidden" id="fullNum" name="fullNum" value="">
+
                         <div class="row mb-3">
                             <label for="mobile_number" class="col-md-4 col-form-label text-md-end">Mobile Number</label>
 
                             <div class="col-md-6">
-                                <input id="mobile_number" type="text"
+                                <input id="mobile_number" type="tel"
                                     class="form-control @error('mobile_number') is-invalid @enderror"
                                     name="mobile_number" value="{{ old('mobile_number') }}" required
                                     autocomplete="mobile_number" autofocus>
@@ -217,4 +225,40 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.getElementById("regForm").onsubmit = function (e) {
+        console.log("ffsf")
+    }
+
+
+    function getIp(callback) {
+ fetch('https://ipinfo.io/json?token=0d18d37ce41d1d', { headers: { 'Accept': 'application/json' }})
+   .then((resp) => resp.json())
+   .catch(() => {
+     return {
+       country: 'us',
+     };
+   })
+   .then((resp) => callback(resp.country));
+}
+
+    window.onload = function () {
+        const phoneInputField = document.querySelector("#mobile_number");
+        const phoneInput = window.intlTelInput(phoneInputField,
+        {
+            initialCountry: "auto",
+            geoIpLookup: getIp,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+        phoneInputField.onblur = function () {
+            console.log(phoneInput.getNumber())
+            document.getElementById("fullNum").value = phoneInput.getNumber();
+        };
+    }
+    
+</script>
+
 @endsection

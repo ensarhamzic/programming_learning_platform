@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasRole('student');
     }
 
+    public function isApproved()
+    {
+        return boolval($this->approved);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

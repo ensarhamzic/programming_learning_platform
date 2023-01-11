@@ -31,5 +31,37 @@ class UserSeeder extends Seeder
             'password' => Hash::make("admin"),
             'approved' => true
         ]);
+
+        User::create([
+            "JMBG" => "1000000000000",
+            "role_id" => 3,
+            "name" => "Ensar",
+            "surname" => "Hamzic",
+            'username' => 'ensarhamzic',
+            'email' => "ensar@ensar.com",
+            'gender' => 'M',
+            'birth_place' => 'Admin',
+            'birth_country' => 'Admin',
+            'birth_date' => '2023-01-01',
+            'mobile_number' => '000000000',
+            'password' => Hash::make("admin"),
+            'approved' => false
+        ]);
+
+        User::create([
+            "JMBG" => "1100000000000",
+            "role_id" => 2,
+            "name" => "Edin",
+            "surname" => "Dolicanin",
+            'username' => 'edindolicanin',
+            'email' => "edin@edin.com",
+            'gender' => 'M',
+            'birth_place' => 'Admin',
+            'birth_country' => 'Admin',
+            'birth_date' => '2023-01-01',
+            'mobile_number' => '000000000',
+            'password' => Hash::make("admin"),
+            'approved' => false
+        ]);
     }
 }

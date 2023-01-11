@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminRegistrationsController;
+use App\Http\Controllers\ManageUsersController;
+use App\Http\Controllers\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +23,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['role:admin'])->group(function () {
-    Route::get('admin', function () {
-        return view('admin');
-    })->name('admin');
+    Route::get('admin/registrations', [AdminRegistrationsController::class, 'index'])->name('admin.registrations.index');
+    Route::delete('admin/registrations/{id}', [AdminRegistrationsController::class, 'destroy'])->name('admin.registrations.destroy');
+    Route::patch('admin/registrations/{id}', [AdminRegistrationsController::class, 'update'])->name('admin.registrations.update');
+
+    Route::get('admin/users/', [ManageUsersController::class, 'index'])->name('admin.users.index');
+    Route::delete('admin/users/{id}', [ManageUsersController::class, 'destroy'])->name('admin.users.destroy');
+
+    Route::get('admin/notifications/', [NotificationsController::class, 'index'])->name('admin.notifications.index');
+    Route::get('admin/notifications/create', [NotificationsController::class, 'create'])->name('admin.notifications.create');
+    Route::post('admin/notifications/', [NotificationsController::class, 'store'])->name('admin.notifications.store');
+    Route::delete('admin/notifications/{id}', [NotificationsController::class, 'destroy'])->name('admin.notifications.destroy');
 });

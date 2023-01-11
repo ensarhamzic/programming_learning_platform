@@ -1,0 +1,87 @@
+.admin_h1 {
+    text-align: center;
+}
+
+.formDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.oneUser,
+.oneNotification {
+    border: 1px solid rgb(61, 61, 61);
+    padding: 10px;
+    max-width: 300px;
+}
+
+.usersList,
+.notificationsList {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.myAlert {
+    width: 500px !important;
+    margin: 10px auto;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.flexForm {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.flexForm input {
+    width: 300px;
+}
+
+.usersDelForm button {
+    width: 80%;
+}
+
+.oneNotification {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.notificationActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notificationForm {
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    text-align: center;
+    gap: 20px;
+}
+
+.notificationActions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.notificationActions button,
+.notificationActions a {
+    width: 150px;
+}

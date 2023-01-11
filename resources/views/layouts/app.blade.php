@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id=" app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -56,7 +56,15 @@
                         @else
                         @if (Auth::user()->isAdmin())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin') }}">Admin Dashboard</a>
+                            <a class="nav-link" href="{{ route('admin.registrations.index') }}">Registration
+                                requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.users.index') }}">Manage users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage
+                                notifications</a>
                         </li>
                         @endif
                         <li class="nav-item dropdown">

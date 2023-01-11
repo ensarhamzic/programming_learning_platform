@@ -41,6 +41,26 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function hasRole($role)
+    {
+        return $this->role->name == $role;
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function isTeacher()
+    {
+        return $this->hasRole('teacher');
+    }
+
+    public function isStudent()
+    {
+        return $this->hasRole('student');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

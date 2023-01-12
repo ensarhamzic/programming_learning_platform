@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminRegistrationsController;
 use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\CoursesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/notifications/create', [NotificationsController::class, 'create'])->name('admin.notifications.create');
     Route::post('admin/notifications/', [NotificationsController::class, 'store'])->name('admin.notifications.store');
     Route::delete('admin/notifications/{id}', [NotificationsController::class, 'destroy'])->name('admin.notifications.destroy');
+});
+
+
+Route::middleware(['role:teacher'])->group(function () {
+    Route::get('teacher/courses/create', [CoursesController::class, 'create'])->name('teacher.courses.create');
 });

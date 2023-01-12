@@ -35,7 +35,7 @@ class LoginController extends Controller
                 return '/admin/registrations';
                 break;
             case 'teacher':
-                return '/home';
+                return '/teacher/courses';
                 break;
 
             default:

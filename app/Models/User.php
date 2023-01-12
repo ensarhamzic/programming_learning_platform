@@ -66,6 +66,11 @@ class User extends Authenticatable
         return boolval($this->approved);
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'user_JMBG', 'JMBG');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

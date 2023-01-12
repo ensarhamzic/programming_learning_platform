@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Models\Course;
 
 class CoursesController extends Controller
 {
@@ -34,7 +36,24 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|min:5',
+            'description' => 'required|min:30',
+            'imageURI' => 'required',
+        ]);
+
+        $imageURI = $request->imageURI;
+        $image_uploaded = Cloudinary::upload($imageURI)->getSecurePath();
+
+        $course = new Course();
+        $course->user_JMBG = auth()->user()->JMBG;
+        $course->title = $request->title;
+        $course->description = $request->description;
+        $course->image = $image_uploaded;
+        $course->active = 1;
+        $course->save();
+
+        return redirect()->route('teacher.courses.create');
     }
 
     /**

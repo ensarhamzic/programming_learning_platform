@@ -43,4 +43,5 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::middleware(['role:teacher'])->group(function () {
     Route::get('teacher/courses/create', [CoursesController::class, 'create'])->name('teacher.courses.create');
+    Route::post('teacher/courses/store', [CoursesController::class, 'store'])->name('teacher.courses.store');
 });

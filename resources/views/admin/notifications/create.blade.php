@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form method="POST" action="{{ route('admin.notifications.store') }}" class="notificationForm">
+<form method="POST" action="{{ route('admin.notifications.store') }}" class="notificationForm" id="form">
   @csrf
   <h3>Add new notification</h3>
 
@@ -21,6 +21,7 @@
         <strong>{{ $message }}</strong>
       </span>
       @enderror
+      <span class="invalid-feedback" role="alert" id="titleError"></span>
     </div>
   </div>
 
@@ -36,6 +37,7 @@
         <strong>{{ $message }}</strong>
       </span>
       @enderror
+      <span class="invalid-feedback" role="alert" id="messageError"></span>
     </div>
   </div>
 
@@ -44,4 +46,43 @@
     <a class="btn btn-danger" href="{{ route('admin.notifications.index') }}">Cancel</a>
   </div>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+  document.getElementById("form").onsubmit = function (e) {
+        e.preventDefault();
+        let formValid = true;
+        
+        let title = document.getElementById("title").value;
+        let message = document.getElementById("message").value;
+
+        let titleError = document.getElementById("titleError");
+        let messageError = document.getElementById("messageError");
+
+        if(title.length < 5) {
+            titleError.innerHTML = "Title must be at least 5 characters long";
+            titleError.style.display = "block";
+            formValid = false;
+        } else {
+            document.getElementById("titleError").innerHTML = "";
+        }
+
+        if(message.length < 30) {
+            messageError.innerHTML = "Message must be at least 30 characters long";
+            messageError.style.display = "block";
+            formValid = false;
+        } else {
+            document.getElementById("messageError").innerHTML = "";
+        }
+
+
+
+
+        if(formValid) {
+            this.submit();
+        }
+         
+    }
+</script>
 @endsection

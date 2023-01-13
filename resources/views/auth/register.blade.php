@@ -395,8 +395,7 @@
             document.getElementById("fullNum").value = phoneInput.getNumber();
         };
 
-        const a = document.getElementById("mobileNumberServerError");
-        a.style.display = "block";
+        document.getElementById("mobileNumberServerError").style.display = "block";
     }
 
     

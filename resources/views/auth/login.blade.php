@@ -18,7 +18,7 @@
                 @endif
                 <div class="card-header">{{ __('Login') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="logForm" novalidate>
                         @csrf
 
                         <div class="row mb-3">
@@ -27,13 +27,15 @@
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                    name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                    name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
+
+                                <span class="invalid-feedback" role="alert" id="emailError"></span>
                             </div>
                         </div>
 
@@ -44,13 +46,16 @@
                             <div class="col-md-6">
                                 <input id="password" type="password"
                                     class="form-control @error('password') is-invalid @enderror" name="password"
-                                    required autocomplete="current-password">
+                                    autocomplete="current-password">
 
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
+
+                                <span class="invalid-feedback" role="alert" id="passwordError"></span>
+
                             </div>
                         </div>
 
@@ -86,4 +91,39 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    document.getElementById("logForm").onsubmit = function (e) {
+        e.preventDefault();
+        let formValid = true;
+        let email = document.getElementById("email");
+        let password = document.getElementById("password");
+    
+        //email should be valid
+        if(!email.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+            emailError.innerHTML = "Email should be valid";
+            emailError.style.display = "block";
+            formValid = false;
+        } else {
+            emailError.innerHTML = "";
+        }
+
+        // password should be at least 8 characters
+        if (password.value.length < 8) {
+            passwordError.innerHTML = "Password should be at least 8 characters";
+            passwordError.style.display = "block";
+            formValid = false;
+        } else {
+            passwordError.innerHTML = "";
+        }
+
+
+        if(formValid) {
+            this.submit();
+        }
+         
+    }
+</script>
 @endsection

@@ -27,7 +27,7 @@
       <div class="card">
         <div class="card-header">Create New Course</div>
         <div class="card-body">
-          <form method="POST" action="{{ route('teacher.courses.store') }}">
+          <form method="POST" action="{{ route('teacher.courses.store') }}" novalidate id="form">
             @csrf
 
             <div class="row mb-3">
@@ -42,6 +42,8 @@
                   <strong>{{ $message }}</strong>
                 </span>
                 @enderror
+
+                <span class="invalid-feedback" role="alert" id="titleError"></span>
               </div>
             </div>
 
@@ -58,6 +60,8 @@
                   <strong>{{ $message }}</strong>
                 </span>
                 @enderror
+
+                <span class="invalid-feedback" role="alert" id="descriptionError"></span>
               </div>
             </div>
 
@@ -69,11 +73,13 @@
                   name="courseImage" required rows="10" autocomplete="current-courseImage"
                   accept="image/png, image/jpeg, image/jpg" />
 
-                @error('courseImage')
-                <span class="invalid-feedback" role="alert">
+                @error('imageURI')
+                <span class="invalid-feedback" role="alert" id="imageServerError">
                   <strong>{{ $message }}</strong>
                 </span>
                 @enderror
+
+                <span class="invalid-feedback" role="alert" id="courseImageError"></span>
               </div>
             </div>
             <input type="hidden" name="imageURI" value="" id="imageURI" />
@@ -94,6 +100,56 @@
 
 @section('scripts')
 <script>
+  document.getElementById("form").onsubmit = function (e) {
+        e.preventDefault();
+        let formValid = true;
+
+        let title = document.getElementById('title');
+        let titleError = document.getElementById('titleError');
+
+        let description = document.getElementById('description');
+        let descriptionError = document.getElementById('descriptionError');
+
+        let courseImage = document.getElementById('courseImage');
+        let courseImageError = document.getElementById('courseImageError');
+
+        
+        if(title.value.length < 5) {
+            titleError.innerHTML = "Title must be at least 5 characters long";
+            titleError.style.display = "block";
+            formValid = false;
+        } else {
+            titleError.style.display = "none";
+        }
+
+        if(description.value.length < 30) {
+            descriptionError.innerHTML = "Description must be at least 30 characters long";
+            descriptionError.style.display = "block";
+            formValid = false;
+        } else {
+            descriptionError.style.display = "none";
+        }
+
+        if(courseImage.files.length == 0) {
+            courseImageError.innerHTML = "Please select a course image";
+            courseImageError.style.display = "block";
+            formValid = false;
+        } else {
+            courseImageError.style.display = "none";
+        }
+
+
+
+
+        if(formValid) {
+            this.submit();
+        }
+         
+    }
+
+
+
+
   let courseImage = document.getElementById('courseImage');
   let newCourseImage = courseImage.cloneNode(true);
   courseImage.parentNode.replaceChild(newCourseImage, courseImage);
@@ -114,5 +170,8 @@
     }
   });
 
+  window.onload = function () {
+    document.getElementById("imageServerError").style.display = "block";
+  }
 </script>
 @endsection

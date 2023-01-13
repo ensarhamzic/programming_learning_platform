@@ -54,7 +54,6 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-
         return Validator::make($data, [
             'JMBG' => ['required', 'string', 'min:13', 'max:13', 'unique:users'],
             'role' => ['required', 'string', 'max:255', Rule::in(['teacher', 'student'])],
@@ -64,7 +63,7 @@ class RegisterController extends Controller
             'birth_place' => ['required', 'string', 'max:255'],
             'birth_country' => ['required', 'string', 'max:255'],
             'birth_date' => ['required', 'date'],
-            'fullNum' => ['required', 'string', 'max:255', 'validPhone'],
+            'fullNum' => ['required', 'string', 'max:255', 'validPhone', 'unique:users,mobile_number'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);

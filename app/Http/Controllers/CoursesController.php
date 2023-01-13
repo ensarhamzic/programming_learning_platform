@@ -15,7 +15,9 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //
+        $activeCourses = Course::where("user_JMBG", auth()->user()->JMBG)->where('active', 1)->get();
+        $inactiveCourses = Course::where("user_JMBG", auth()->user()->JMBG)->where('active', 0)->get();
+        return view('teacher.courses.index', compact('activeCourses', 'inactiveCourses'));
     }
 
     /**
@@ -53,7 +55,7 @@ class CoursesController extends Controller
         $course->active = 1;
         $course->save();
 
-        return redirect()->route('teacher.courses.create');
+        return redirect()->route('teacher.courses.index');
     }
 
     /**
@@ -64,7 +66,8 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
-        //
+        $course = Course::findOrFail($id);
+        return view('teacher.courses.show', compact('course'));
     }
 
     /**
@@ -98,6 +101,16 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+        $course->delete();
+        return redirect()->route('teacher.courses.index');
+    }
+
+    public function toggleActive($id)
+    {
+        $course = Course::find($id);
+        $course->active = !$course->active;
+        $course->save();
+        return redirect()->route('teacher.courses.index');
     }
 }

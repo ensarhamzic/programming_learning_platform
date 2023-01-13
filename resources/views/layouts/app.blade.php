@@ -74,6 +74,13 @@
                             <a class="nav-link" href="{{ route('admin.notifications.index') }}">Manage
                                 notifications</a>
                         </li>
+                        @elseif (Auth::user()->isTeacher())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('teacher.courses.index') }}">My courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('teacher.courses.create') }}">Create course</a>
+                        </li>
                         @endif
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

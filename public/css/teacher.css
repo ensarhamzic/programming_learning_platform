@@ -30,3 +30,52 @@
     display: block;
     max-width: 100%;
 }
+
+.activeCourses,
+.inactiveCourses {
+    margin: 0 0 50px 0;
+}
+
+.activeCourses h1,
+.inactiveCourses h1 {
+    text-align: center;
+}
+
+.activeCoursesList,
+.inactiveCoursesList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.course {
+    border: 1px solid #000;
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.courseBanner {
+    width: 370px;
+    margin: 10px auto;
+}
+
+.courseBanner img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.courseTitle {
+    testalign: center;
+}
+
+.courseOptions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+}

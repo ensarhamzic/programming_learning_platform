@@ -10,6 +10,12 @@
                     {{ session('success') }}
                 </div>
                 @endif
+
+                @if ($errors->has('error'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('error') }}
+                </div>
+                @endif
                 <div class="card-header">{{ __('Login') }}</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">

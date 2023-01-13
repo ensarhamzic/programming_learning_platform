@@ -173,15 +173,8 @@
 
                             <div class="col-md-6">
                                 <input id="mobile_number" type="tel"
-                                    class="form-control @error('mobile_number') is-invalid @enderror"
-                                    name="mobile_number" value="{{ old('mobile_number') }}" required
-                                    autocomplete="mobile_number" autofocus>
-
-                                @error('mobile_number')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                    class="form-control @error('fullNum') is-invalid @enderror" name="mobile_number"
+                                    value="{{ old('mobile_number') }}" required autocomplete="mobile_number" autofocus>
                             </div>
                         </div>
 

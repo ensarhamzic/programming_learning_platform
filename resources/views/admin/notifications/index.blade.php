@@ -2,9 +2,19 @@
 
 @section('options')
 <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
+
+<script>
+  const deleteClickHandler = (id) => {
+    var url = '{{ route("admin.notifications.destroy", ":id") }}';
+    url = url.replace(':id', id);
+    document.getElementById("deleteForm").setAttribute("action", url);
+  }
+</script>
 @endsection
 
 @section('content')
+<x-delete-modal title="Delete notification" content="Are you sure you want to delete this notification?"
+  buttonContent="Delete notification" />
 
 <h1 class='admin_h1'>Notifications</h1>
 <div class="notificationActions">
@@ -22,13 +32,9 @@
       <h2 class='admin_h2'>{{ $notification->title }}</h2>
       <p class='admin_p'>{{ $notification->message }}</p>
     </div>
-    <form method="POST" class="flexForm usersDelForm"
-      action="{{ route('admin.notifications.destroy', [$notification->id]) }}">
-      @csrf
-      @method('DELETE')
-      <button type="submit" class="btn btn-danger manageDelBtn">Delete</button>
-    </form>
 
+    <button type="button" class="btn btn-danger manageDelBtn" data-bs-toggle="modal" data-bs-target="#deleteModal"
+      onclick="deleteClickHandler({{ $notification->id }})">Delete Notification</button>
   </div>
   @endforeach
   @endif

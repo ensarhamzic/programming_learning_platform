@@ -1,0 +1,32 @@
+.course {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.course h1 {
+    text-align: center;
+    font-size: 3rem;
+}
+
+.bannerDiv {
+    margin: 10px auto;
+    width: 600px;
+    aspect-ratio: 16/9;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.bannerDiv img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.description {
+    width: 600px;
+    margin: 0 auto;
+    font-size: 1.3rem;
+}

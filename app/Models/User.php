@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasMany(Course::class, 'user_JMBG', 'JMBG');
     }
 
+    public function ownsCourse($course)
+    {
+        return $this->courses->contains($course);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -40,12 +40,12 @@ Route::middleware(['role:admin'])->group(function () {
     Route::delete('admin/notifications/{id}', [NotificationsController::class, 'destroy'])->name('admin.notifications.destroy');
 });
 
-
 Route::middleware(['role:teacher'])->group(function () {
     Route::get('teacher/courses', [CoursesController::class, 'index'])->name('teacher.courses.index');
     Route::get('teacher/courses/create', [CoursesController::class, 'create'])->name('teacher.courses.create');
     Route::post('teacher/courses/store', [CoursesController::class, 'store'])->name('teacher.courses.store');
-    Route::get('teacher/courses/{id}', [CoursesController::class, 'show'])->name('teacher.courses.show');
     Route::post('teacher/courses/{id}/toggleActive', [CoursesController::class, 'toggleActive'])->name('teacher.courses.toggleActive');
     Route::delete('teacher/courses/{id}/', [CoursesController::class, 'destroy'])->name('teacher.courses.destroy');
 });
+
+Route::get('courses/{id}', [CoursesController::class, 'show'])->name('courses.show');

@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'birth_place' => 'Admin',
             'birth_country' => 'Admin',
             'birth_date' => '2023-01-01',
-            'mobile_number' => '000000000',
+            'mobile_number' => '+38166542105',
             'password' => Hash::make("admin123"),
             'approved' => true
         ]);
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'birth_place' => 'Admin',
             'birth_country' => 'Admin',
             'birth_date' => '2023-01-01',
-            'mobile_number' => '000000000',
+            'mobile_number' => '+381654487548',
             'password' => Hash::make("admin123"),
             'approved' => false
         ]);
@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
             'birth_place' => 'Admin',
             'birth_country' => 'Admin',
             'birth_date' => '2023-01-01',
-            'mobile_number' => '000000000',
+            'mobile_number' => '+391621587245',
             'password' => Hash::make("admin123"),
             'approved' => false
         ]);

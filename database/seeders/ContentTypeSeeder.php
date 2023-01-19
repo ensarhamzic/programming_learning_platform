@@ -20,6 +20,9 @@ class ContentTypeSeeder extends Seeder
                 'name' => 'video',
             ],
             [
+                'name' => 'image',
+            ],
+            [
                 'name' => 'pdf',
             ],
             [
@@ -30,6 +33,9 @@ class ContentTypeSeeder extends Seeder
             ],
             [
                 'name' => 'zip',
+            ],
+            [
+                'name' => 'link',
             ]
         ];
 

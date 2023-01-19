@@ -31,9 +31,6 @@
           <div class="courseTitle">
             <h2>{{ $course->title }}</h2>
           </div>
-          <div class="courseDescription">
-            <p>{{ $course->description }}</p>
-          </div>
         </div>
         <div class="courseOptions">
           <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View course</a>
@@ -62,9 +59,6 @@
           </div>
           <div class="courseTitle">
             <h2>{{ $course->title }}</h2>
-          </div>
-          <div class="courseDescription">
-            <p>{{ $course->description }}</p>
           </div>
         </div>
         <div class="courseOptions">

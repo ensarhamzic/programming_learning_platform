@@ -6,17 +6,28 @@
 
 @section('content')
 <div class="course">
-  {{-- @auth
-  @if (Auth::user()->ownsCourse($course))
-  <button>Edit</button>
+  @if(Session::has('success'))
+  <div class="alert alert-success">
+    {{ Session::get('success') }}
+  </div>
   @endif
-  @endauth --}}
+  @auth
+  @if (Auth::user()->ownsCourse($course))
+  <div class="teacherActions">
+    <a class="btn btn-primary" href="{{ route('teacher.courses.addContent', $course->id) }}">Add Content</a>
+    <a class="btn btn-info" href="{{ route('teacher.courses.addSection', $course->id) }}">Add Section</a>
+    <a class="btn btn-secondary" href="{{ route('teacher.courses.edit', $course->id) }}">Edit Course</a>
+  </div>
+  @endif
+  @endauth
   <h1>{{ $course->title }}</h1>
   <div class="bannerDiv">
     <img src="{{ $course->image }}" alt="Course banner">
   </div>
   <div class="description">
-    <p>{{ $course->description }}</p>
+    <p>
+      {{ $course->description }}
+    </p>
   </div>
 </div>
 

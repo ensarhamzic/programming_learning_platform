@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContentType;
 use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Storage;
+use Auth;
+
+
 use App\Models\Course;
 
 class CoursesController extends Controller
@@ -78,7 +83,10 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $course = Course::findOrFail($id);
+        if (Auth::user()->ownsCourse($course))
+            return view('teacher.courses.edit', compact('course'));
+        return redirect()->back();
     }
 
     /**
@@ -90,7 +98,25 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (!Auth::user()->ownsCourse(Course::find($id)))
+            return redirect()->back();
+
+        $request->validate([
+            'title' => 'required|min:5',
+            'description' => 'required|min:30',
+        ]);
+
+        $course = Course::find($id);
+        $course->title = $request->title;
+        $course->description = $request->description;
+        if ($request->imageURI) {
+            $imageURI = $request->imageURI;
+            $image_uploaded = Cloudinary::upload($imageURI)->getSecurePath();
+            $course->image = $image_uploaded;
+        }
+        $course->save();
+
+        return redirect()->route('courses.show', $id)->with('success', 'Course updated successfully');
     }
 
     /**
@@ -112,5 +138,63 @@ class CoursesController extends Controller
         $course->active = !$course->active;
         $course->save();
         return redirect()->route('teacher.courses.index');
+    }
+
+    public function addSection(Request $request, $courseId)
+    {
+        return view('teacher.courses.addSection', compact('courseId'));
+    }
+
+    public function storeSection(Request $request, $courseId)
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        $course = Course::find($courseId);
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+        $course->sections()->create([
+            'title' => $request->title,
+        ]);
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Section added successfully');
+    }
+
+    public function addContent(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+        return view('teacher.courses.addContent', ['course' => $course]);
+    }
+
+    public function storeContent(Request $request,  $courseId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'section' => 'required',
+        ]);
+
+        $uploadedFileUrl = Cloudinary::upload($request->file('content')->getRealPath())->getSecurePath();
+
+        $course = Course::find($courseId);
+        $contentType = ContentType::where('name', $request->contentType)->first();
+
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+
+        $course->sections()->find($request->section)->contents()->create([
+            'title' => $request->title,
+            'source' => $uploadedFileUrl,
+            'content_type_id' => $contentType->id,
+        ]);
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Content added successfully');
     }
 }

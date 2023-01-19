@@ -12,12 +12,16 @@ class Content extends Model
     protected $fillable = [
         'content_type_id',
         'title',
-        'description',
         'source',
     ];
 
     public function contentType()
     {
         return $this->belongsTo(ContentType::class);
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 }

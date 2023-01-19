@@ -61,7 +61,7 @@ class UserSeeder extends Seeder
             'birth_date' => '2023-01-01',
             'mobile_number' => '+391621587245',
             'password' => Hash::make("admin123"),
-            'approved' => false
+            'approved' => true
         ]);
     }
 }

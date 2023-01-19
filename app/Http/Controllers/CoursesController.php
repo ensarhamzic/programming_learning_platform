@@ -6,10 +6,12 @@ use App\Models\ContentType;
 use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Auth;
 
 
 use App\Models\Course;
+use App\Models\Question;
 
 class CoursesController extends Controller
 {
@@ -176,24 +178,121 @@ class CoursesController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
             'section' => 'required',
+            'checkQuestion' => "required",
+            'checkQuestionAnswers' => "required",
+            'easyQuestion' => "required",
+            'easyQuestionAnswers' => "required",
+            'mediumQuestion' => "required",
+            'mediumQuestionAnswers' => "required",
+            'hardQuestion' => "required",
+            'hardQuestionAnswers' => "required",
         ]);
 
-        $uploadedFileUrl = Cloudinary::upload($request->file('content')->getRealPath())->getSecurePath();
+
+        if ($request->onlyLink) {
+            $request->validate([
+                'link' => 'required',
+            ]);
+        } else {
+            $request->validate([
+                'content' => 'required',
+            ]);
+        }
 
         $course = Course::find($courseId);
-        $contentType = ContentType::where('name', $request->contentType)->first();
-
         if (!Auth::user()->ownsCourse($course))
             return redirect()->back();
 
+        $contentSource = null;
+        if ($request->onlyLink) {
+            $contentSource = $request->link;
+        } else {
+            $file = $request->file('content');
+            $destinationPath = '/uploads';
+            $filename = $file->getClientOriginalName();
+            $file->move($destinationPath, $filename);
 
-        $course->sections()->find($request->section)->contents()->create([
+            $filePath = $destinationPath . '/' . $filename;
+
+            $contentSource = Cloudinary::upload($filePath, [
+                'resource_type' => 'auto',
+            ])->getSecurePath();
+
+            unlink($filePath);
+        }
+
+        $contentType = ContentType::where('name', $request->contentType)->first();
+
+        $addedContent = $course->sections()->find($request->section)->contents()->create([
             'title' => $request->title,
-            'source' => $uploadedFileUrl,
+            'source' => $contentSource,
             'content_type_id' => $contentType->id,
         ]);
+
+
+        $checkQuestion = new Question();
+        $checkQuestion->content_id = $addedContent->id;
+        $checkQuestion->text = $request->checkQuestion;
+        $checkQuestion->type = 'check';
+        $checkQuestion->save();
+
+
+        $correctCheckAnswer = $request->checkQuestionAnswers[0];
+        foreach ($request->checkQuestionAnswers as $answer) {
+            $checkQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctCheckAnswer,
+            ]);
+        }
+
+
+        $easyQuestion = new Question();
+        $easyQuestion->content_id = $addedContent->id;
+        $easyQuestion->text = $request->easyQuestion;
+        $easyQuestion->type = 'test';
+        $easyQuestion->level = 'easy';
+        $easyQuestion->save();
+
+        $correctEasyAnswer = $request->easyQuestionAnswers[0];
+        foreach ($request->easyQuestionAnswers as $answer) {
+            $easyQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctEasyAnswer,
+            ]);
+        }
+
+
+        $mediumQuestion = new Question();
+        $mediumQuestion->content_id = $addedContent->id;
+        $mediumQuestion->text = $request->mediumQuestion;
+        $mediumQuestion->type = 'test';
+        $mediumQuestion->level = 'medium';
+        $mediumQuestion->save();
+
+        $correctMediumAnswer = $request->mediumQuestionAnswers[0];
+        foreach ($request->mediumQuestionAnswers as $answer) {
+            $mediumQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctMediumAnswer,
+            ]);
+        }
+
+
+        $hardQuestion = new Question();
+        $hardQuestion->content_id = $addedContent->id;
+        $hardQuestion->text = $request->hardQuestion;
+        $hardQuestion->type = 'test';
+        $hardQuestion->level = 'hard';
+        $hardQuestion->save();
+
+        $correctHardAnswer = $request->hardQuestionAnswers[0];
+        foreach ($request->hardQuestionAnswers as $answer) {
+            $hardQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctHardAnswer,
+            ]);
+        }
 
         return redirect()->route('courses.show', $courseId)->with('success', 'Content added successfully');
     }

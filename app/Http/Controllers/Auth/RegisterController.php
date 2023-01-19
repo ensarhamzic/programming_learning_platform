@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\AuthenticationException;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -91,7 +92,7 @@ class RegisterController extends Controller
 
 
 
-        $user = User::create([
+        User::create([
             'JMBG' => $data['JMBG'],
             'role_id' => $roleId,
             'name' => $data['name'],
@@ -103,11 +104,17 @@ class RegisterController extends Controller
             'birth_date' => $data['birth_date'],
             'mobile_number' => $data['fullNum'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'password' => Hash::make($data['password']),
+            'approved' => $roleId == 3 ? true : false,
         ]);
 
-        event(new Registered($user));
+        $lastUser = User::latest()->first();
 
-        throw new AuthenticationException();
+        if ($lastUser->role_id == 2) {
+            event(new Registered($lastUser));
+            throw new AuthenticationException();
+        }
+
+        return $lastUser;
     }
 }

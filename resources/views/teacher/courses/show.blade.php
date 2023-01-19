@@ -29,6 +29,49 @@
       {{ $course->description }}
     </p>
   </div>
+  @auth
+  <div class="mainContent">
+    @foreach ($course->sections as $section)
+    <div class="section">
+      <h3>{{ $section->title }}</h3>
+      @if ($section->contents->count() > 0)
+      @foreach ($section->contents as $content)
+      <div class="oneContent">
+        <a href="{{ $content->source }}" target="_blank">
+          @if ($content->isPdf())
+          <x-pdf-icon />
+          @endif
+          @if ($content->isImage())
+          <x-image-icon />
+          @endif
+          @if ($content->isVideo())
+          <x-video-icon />
+          @endif
+          @if ($content->isZip())
+          <x-zip-icon />
+          @endif
+          @if ($content->isDocument())
+          <x-document-icon />
+          @endif
+          @if ($content->isLink())
+          <x-link-icon />
+          @endif
+          @if ($content->isPresentation())
+          <x-presentation-icon />
+          @endif
+          {{ $content->title }}
+        </a>
+      </div>
+      @endforeach
+      @else
+      <p>
+        <i>No content in this section</i>
+      </p>
+      @endif
+    </div>
+    @endforeach
+  </div>
+  @endauth
 </div>
 
 @endsection

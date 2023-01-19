@@ -80,3 +80,25 @@
     gap: 20px;
     align-items: center;
 }
+
+.linkDiv {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    align-items: center;
+}
+
+.testQuestionInfo {
+    font-size: 0.8rem;
+}
+
+.correctAnswer input {
+    font-weight: bold;
+    border-color: green !important;
+    background: rgb(213, 254, 210);
+}
+
+.incorrectAnswer input {
+    border-color: red !important;
+    background: rgb(255, 221, 221);
+}

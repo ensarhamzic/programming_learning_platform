@@ -14,7 +14,6 @@
 
 @section('content')
 <x-delete-modal title="Delete user" content="Are you sure you want to delete this user?" buttonContent="Delete user" />
-
 <div>
   @if (session('approved'))
   <div class="alert alert-info myAlert" role="alert">
@@ -27,7 +26,6 @@
   </div>
   @endif
   <h1 class='admin_h1'>Approve or reject registrations</h1>
-
   <div class="usersList">
     @if (count($users) == 0)
     <p class='admin_p'>There are no registration requests</p>

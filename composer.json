@@ -6,7 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "blade-ui-kit/blade-icons": "^1.5",
         "cloudinary-labs/cloudinary-laravel": "^2.0",
+        "codeat3/blade-teeny-icons": "^1.8",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",

@@ -72,7 +72,11 @@ class AdminRegistrationsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $stringId = (string)$id;
+        while (strlen($stringId) < 13) {
+            $stringId = '0' . $stringId;
+        }
+        $user = User::find($stringId);
         $user->approved = 1;
         $user->save();
         Session::flash('approved', 'User approved');

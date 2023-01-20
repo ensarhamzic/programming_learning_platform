@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_JMBG');
             $table->string('title');
-            $table->string('description');
+            $table->string('description', 5000);
             $table->string('image');
             $table->boolean('active');
             $table->timestamps();

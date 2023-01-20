@@ -171,7 +171,10 @@
   });
 
   window.onload = function () {
-    document.getElementById("imageServerError").style.display = "block";
+    const imageServerError = document.getElementById("imageServerError")
+    if (imageServerError) {
+      imageServerError.style.display = "block";
+    }
   }
 </script>
 @endsection

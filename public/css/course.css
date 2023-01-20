@@ -28,7 +28,7 @@
 }
 
 .description {
-    width: 600px;
+    width: 70%;
     margin: 0 auto;
     font-size: 1.3rem;
 }
@@ -56,26 +56,59 @@
 }
 
 .oneContent {
+    display: flex;
+    align-items: center;
+    gap: 20px;
     margin-left: 25px;
     font-size: 1.8rem;
 }
 
-.oneContent a {
+.oneContent .contentLink {
     text-decoration: none;
+    display: flex;
+    align-items: center;
 }
 
-.oneContent a:link,
-.oneContent a:visited {
+.oneContent .contentLink:link,
+.oneContent .contentLink:visited {
     color: #000;
 }
 
-.oneContent a:hover {
+.oneContent .contentLink:hover {
     color: #000;
     text-decoration: underline;
+}
+
+.contentActionLink,
+.contentActionLink:link,
+.contentActionLink:visited {
+    color: rgb(92, 92, 92);
+    font-size: 1rem;
+}
+
+.contentActionLink:hover {
+    color: #000;
 }
 
 .oneContent svg {
     width: 30px !important;
     height: auto;
     margin: 10px 0;
+}
+
+.sectionTitleDiv {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+}
+
+.sectionTitleDiv a,
+.sectionTitleDiv a:link,
+.sectionTitleDiv a:visited {
+    color: rgb(92, 92, 92);
+}
+
+.sectionTitleDiv a:hover {
+    color: #000;
+    text-decoration: underline;
 }

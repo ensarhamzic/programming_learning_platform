@@ -12,6 +12,8 @@ use Auth;
 
 use App\Models\Course;
 use App\Models\Question;
+use App\Models\Section;
+use App\Models\Content;
 
 class CoursesController extends Controller
 {
@@ -55,7 +57,11 @@ class CoursesController extends Controller
         $image_uploaded = Cloudinary::upload($imageURI)->getSecurePath();
 
         $course = new Course();
-        $course->user_JMBG = auth()->user()->JMBG;
+        $stringJMBG = (string)auth()->user()->JMBG;
+        while (strlen($stringJMBG) < 13) {
+            $stringJMBG = '0' . $stringJMBG;
+        }
+        $course->user_JMBG = $stringJMBG;
         $course->title = $request->title;
         $course->description = $request->description;
         $course->image = $image_uploaded;
@@ -162,6 +168,48 @@ class CoursesController extends Controller
         ]);
 
         return redirect()->route('courses.show', $courseId)->with('success', 'Section added successfully');
+    }
+
+    public function editSection(Request $request, $courseId, $sectionId)
+    {
+        $course = Course::findOrFail($courseId);
+        $section = $course->sections()->findOrFail($sectionId);
+
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+        return view('teacher.courses.editSection', ['course' => $course, 'section' => $section]);
+    }
+
+    public function updateSection(Request $request, $courseId, $sectionId)
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
+
+        $course = Course::findOrFail($courseId);
+        $section = $course->sections()->findOrFail($sectionId);
+
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+        $section->title = $request->title;
+        $section->save();
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Section updated successfully');
+    }
+
+    public function deleteSection(Request $request, $courseId, $sectionId)
+    {
+        $course = Course::findOrFail($courseId);
+        $section = $course->sections()->findOrFail($sectionId);
+
+        if (!Auth::user()->ownsCourse($course))
+            return redirect()->back();
+
+        $section->delete();
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Section deleted successfully');
     }
 
     public function addContent(Request $request, $courseId)
@@ -295,5 +343,179 @@ class CoursesController extends Controller
         }
 
         return redirect()->route('courses.show', $courseId)->with('success', 'Content added successfully');
+    }
+
+    public function editContent(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        $checkQuestion = $content->questions()->where('type', 'check')->first();
+
+        $easyQuestion = $content->questions()->where('type', 'test')->where('level', 'easy')->first();
+        $mediumQuestion = $content->questions()->where('type', 'test')->where('level', 'medium')->first();
+        $hardQuestion = $content->questions()->where('type', 'test')->where('level', 'hard')->first();
+
+
+
+        if (!Auth::user()->ownsCourse($course) || !$content)
+            return redirect()->back();
+
+        return view(
+            'teacher.courses.editContent',
+            [
+                'course' => $course, 'content' => $content,
+                'checkQuestion' => $checkQuestion,
+                'easyQuestion' => $easyQuestion,
+                'mediumQuestion' => $mediumQuestion,
+                'hardQuestion' => $hardQuestion
+            ]
+        );
+    }
+
+    public function updateContent(Request $request, $courseId, $contentId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'section' => 'required',
+            'checkQuestion' => "required",
+            'checkQuestionAnswers' => "required",
+            'easyQuestion' => "required",
+            'easyQuestionAnswers' => "required",
+            'mediumQuestion' => "required",
+            'mediumQuestionAnswers' => "required",
+            'hardQuestion' => "required",
+            'hardQuestionAnswers' => "required",
+        ]);
+
+
+        if ($request->content) {
+            $file = $request->file('content');
+            $destinationPath = 'uploads';
+            $filename = $file->getClientOriginalName();
+            $file->move($destinationPath, $filename);
+
+            $filePath = $destinationPath . '/' . $filename;
+
+            $contentSource = Cloudinary::upload($filePath, [
+                'resource_type' => 'auto',
+            ])->getSecurePath();
+        } else if ($request->link) {
+            $contentSource = $request->link;
+        } else {
+            $contentSource = $request->source;
+        }
+
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        if (!Auth::user()->ownsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $contentType = ContentType::where('name', $request->contentType)->first();
+
+        $content->title = $request->title;
+        $content->section_id = $request->section;
+        $content->source = $contentSource;
+        if ($contentType)
+            $content->content_type_id = $contentType->id;
+        $content->save();
+
+        $content->questions()->delete();
+
+        $checkQuestion = new Question();
+        $checkQuestion->content_id = $content->id;
+        $checkQuestion->text = $request->checkQuestion;
+        $checkQuestion->type = 'check';
+        $checkQuestion->save();
+
+
+        $correctCheckAnswer = $request->checkQuestionAnswers[0];
+        foreach ($request->checkQuestionAnswers as $answer) {
+            $checkQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctCheckAnswer,
+            ]);
+        }
+
+
+        $easyQuestion = new Question();
+        $easyQuestion->content_id = $content->id;
+        $easyQuestion->text = $request->easyQuestion;
+        $easyQuestion->type = 'test';
+        $easyQuestion->level = 'easy';
+        $easyQuestion->save();
+
+        $correctEasyAnswer = $request->easyQuestionAnswers[0];
+        foreach ($request->easyQuestionAnswers as $answer) {
+            $easyQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctEasyAnswer,
+            ]);
+        }
+
+
+        $mediumQuestion = new Question();
+        $mediumQuestion->content_id = $content->id;
+        $mediumQuestion->text = $request->mediumQuestion;
+        $mediumQuestion->type = 'test';
+        $mediumQuestion->level = 'medium';
+        $mediumQuestion->save();
+
+        $correctMediumAnswer = $request->mediumQuestionAnswers[0];
+        foreach ($request->mediumQuestionAnswers as $answer) {
+            $mediumQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctMediumAnswer,
+            ]);
+        }
+
+
+        $hardQuestion = new Question();
+        $hardQuestion->content_id = $content->id;
+        $hardQuestion->text = $request->hardQuestion;
+        $hardQuestion->type = 'test';
+        $hardQuestion->level = 'hard';
+        $hardQuestion->save();
+
+        $correctHardAnswer = $request->hardQuestionAnswers[0];
+        foreach ($request->hardQuestionAnswers as $answer) {
+            $hardQuestion->answers()->create([
+                'text' => $answer,
+                'is_correct' => $answer == $correctHardAnswer,
+            ]);
+        }
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Content updated successfully');
+    }
+
+    public function deleteContent(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        if (!Auth::user()->ownsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $content->delete();
+
+        return redirect()->route('courses.show', $courseId)->with('success', 'Content deleted successfully');
     }
 }

@@ -29,15 +29,24 @@
       {{ $course->description }}
     </p>
   </div>
+  <hr />
   @auth
   <div class="mainContent">
+    <div>
+      <h1>Course content</h1>
+    </div>
     @foreach ($course->sections as $section)
     <div class="section">
-      <h3>{{ $section->title }}</h3>
+      <div class="sectionTitleDiv">
+        <h3>{{ $section->title }}</h3>
+        @if (Auth::user()->ownsCourse($course))
+        <a href="{{ route('teacher.courses.updateSection', [$course->id, $section->id]) }}">Edit</a>
+        @endif
+      </div>
       @if ($section->contents->count() > 0)
       @foreach ($section->contents as $content)
       <div class="oneContent">
-        <a href="{{ $content->source }}" target="_blank">
+        <a class="contentLink" href="{{ $content->source }}" target="_blank">
           @if ($content->isPdf())
           <x-pdf-icon />
           @endif
@@ -61,6 +70,10 @@
           @endif
           {{ $content->title }}
         </a>
+        @if (Auth::user()->ownsCourse($course))
+        <a href="{{ route('teacher.courses.editContent', [$course->id, $content->id]) }}"
+          class="contentActionLink">Edit</a>
+        @endif
       </div>
       @endforeach
       @else

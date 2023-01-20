@@ -102,3 +102,7 @@
     border-color: red !important;
     background: rgb(255, 221, 221);
 }
+
+.editActions {
+    gap: 20px;
+}

@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
             'birth_date' => '2023-01-01',
             'mobile_number' => '+381654487548',
             'password' => Hash::make("admin123"),
-            'approved' => false
+            'approved' => true
         ]);
 
         User::create([

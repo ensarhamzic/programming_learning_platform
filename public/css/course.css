@@ -112,3 +112,31 @@
     color: #000;
     text-decoration: underline;
 }
+
+.notEnrolled {
+    font-size: 1.5rem;
+}
+
+input[type="checkbox"] {
+    /* Double-sized Checkboxes */
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    transform: scale(2);
+    padding: 10px;
+}
+
+.checkQuestion {
+    width: 800px;
+    padding: 20px 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin: 20px auto;
+}
+
+.answers {
+    line-height: 50px;
+    font-size: 1.3rem;
+}

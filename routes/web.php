@@ -55,6 +55,9 @@ Route::middleware(['role:teacher'])->group(function () {
     Route::put('teacher/courses/{id}/editSection/{sectionId}', [CoursesController::class, 'updateSection'])->name('teacher.courses.updateSection');
     Route::delete('teacher/courses/{id}/deleteSection/{sectionId}', [CoursesController::class, 'deleteSection'])->name('teacher.courses.deleteSection');
 
+    Route::post('teacher/courses/{id}/complete', [CoursesController::class, 'complete'])->name('teacher.courses.complete');
+    Route::post('teacher/courses/{id}/incomplete', [CoursesController::class, 'incomplete'])->name('teacher.courses.incomplete');
+
     Route::get('teacher/courses/{id}/addContent', [CoursesController::class, 'addContent'])->name('teacher.courses.addContent');
     Route::post('teacher/courses/{id}/addContent', [CoursesController::class, 'storeContent'])->name('teacher.courses.storeContent');
     Route::get('teacher/courses/{id}/editContent/{contentId}', [CoursesController::class, 'editContent'])->name('teacher.courses.editContent');
@@ -63,3 +66,8 @@ Route::middleware(['role:teacher'])->group(function () {
 });
 
 Route::get('courses/{id}', [CoursesController::class, 'show'])->name('courses.show');
+Route::get('courses/{id}/content/{contentId}/question', [CoursesController::class, 'showCheckQuestion'])->name('courses.checkQuestion');
+Route::post('courses/{id}/content/{contentId}/question/{questionId}', [CoursesController::class, 'answerQuestion'])->name('courses.questions.answer');
+Route::post('courses/{id}/enroll', [CoursesController::class, 'enroll'])->name('courses.enroll');
+Route::delete('courses/{id}/unenroll', [CoursesController::class, 'unenroll'])->name('courses.unenroll');
+Route::post('courses/{id}/content/{contentId}/complete', [CoursesController::class, 'completeContent'])->name('courses.completeContent');

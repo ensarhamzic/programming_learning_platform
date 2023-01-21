@@ -14,6 +14,9 @@ use App\Models\Course;
 use App\Models\Question;
 use App\Models\Section;
 use App\Models\Content;
+use App\Models\CourseAttend;
+use App\Models\ContentComplete;
+use App\Models\QuestionAnswer;
 
 class CoursesController extends Controller
 {
@@ -81,6 +84,57 @@ class CoursesController extends Controller
     {
         $course = Course::findOrFail($id);
         return view('teacher.courses.show', compact('course'));
+    }
+
+    public function showCheckQuestion(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        if (!Auth::user()->attendsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $question = Question::where('content_id', $contentId)->where('type', 'check')->first();
+
+        return view('teacher.courses.showCheckQuestion', compact('course', 'content', 'question'));
+    }
+
+    public function answerQuestion(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        if (!Auth::user()->attendsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $question = Question::where('content_id', $contentId)->where('type', 'check')->first();
+        $answerId = $request->answer;
+
+        if ($question->answers->pluck('id')->contains($answerId)) {
+            $questionAnswer = new QuestionAnswer();
+            $questionAnswer->user_JMBG = auth()->user()->JMBG;
+            $questionAnswer->answer_id = $answerId;
+            $questionAnswer->save();
+
+            $contentComplete = new ContentComplete();
+            $contentComplete->user_JMBG = auth()->user()->JMBG;
+            $contentComplete->content_id = $contentId;
+            $contentComplete->save();
+        }
+
+        return redirect()->route('courses.show', $courseId);
     }
 
     /**
@@ -432,69 +486,52 @@ class CoursesController extends Controller
             $content->content_type_id = $contentType->id;
         $content->save();
 
-        $content->questions()->delete();
-
-        $checkQuestion = new Question();
-        $checkQuestion->content_id = $content->id;
+        $checkQuestion = $content->questions()->where('type', 'check')->first();
         $checkQuestion->text = $request->checkQuestion;
-        $checkQuestion->type = 'check';
         $checkQuestion->save();
 
-
+        $checkQuestionAnswers = $checkQuestion->answers()->get();
         $correctCheckAnswer = $request->checkQuestionAnswers[0];
-        foreach ($request->checkQuestionAnswers as $answer) {
-            $checkQuestion->answers()->create([
-                'text' => $answer,
-                'is_correct' => $answer == $correctCheckAnswer,
-            ]);
+        for ($i = 0; $i < count($checkQuestionAnswers); $i++) {
+            $checkQuestionAnswers[$i]->text = $request->checkQuestionAnswers[$i];
+            $checkQuestionAnswers[$i]->is_correct = $request->checkQuestionAnswers[$i] == $correctCheckAnswer;
+            $checkQuestionAnswers[$i]->save();
         }
 
-
-        $easyQuestion = new Question();
-        $easyQuestion->content_id = $content->id;
+        $easyQuestion = $content->questions()->where('type', 'test')->where('level', 'easy')->first();
         $easyQuestion->text = $request->easyQuestion;
-        $easyQuestion->type = 'test';
-        $easyQuestion->level = 'easy';
         $easyQuestion->save();
 
+        $easyQuestionAnswers = $easyQuestion->answers()->get();
         $correctEasyAnswer = $request->easyQuestionAnswers[0];
-        foreach ($request->easyQuestionAnswers as $answer) {
-            $easyQuestion->answers()->create([
-                'text' => $answer,
-                'is_correct' => $answer == $correctEasyAnswer,
-            ]);
+        for ($i = 0; $i < count($easyQuestionAnswers); $i++) {
+            $easyQuestionAnswers[$i]->text = $request->easyQuestionAnswers[$i];
+            $easyQuestionAnswers[$i]->is_correct = $request->easyQuestionAnswers[$i] == $correctEasyAnswer;
+            $easyQuestionAnswers[$i]->save();
         }
 
-
-        $mediumQuestion = new Question();
-        $mediumQuestion->content_id = $content->id;
+        $mediumQuestion = $content->questions()->where('type', 'test')->where('level', 'medium')->first();
         $mediumQuestion->text = $request->mediumQuestion;
-        $mediumQuestion->type = 'test';
-        $mediumQuestion->level = 'medium';
         $mediumQuestion->save();
 
+        $mediumQuestionAnswers = $mediumQuestion->answers()->get();
         $correctMediumAnswer = $request->mediumQuestionAnswers[0];
-        foreach ($request->mediumQuestionAnswers as $answer) {
-            $mediumQuestion->answers()->create([
-                'text' => $answer,
-                'is_correct' => $answer == $correctMediumAnswer,
-            ]);
+        for ($i = 0; $i < count($mediumQuestionAnswers); $i++) {
+            $mediumQuestionAnswers[$i]->text = $request->mediumQuestionAnswers[$i];
+            $mediumQuestionAnswers[$i]->is_correct = $request->mediumQuestionAnswers[$i] == $correctMediumAnswer;
+            $mediumQuestionAnswers[$i]->save();
         }
 
-
-        $hardQuestion = new Question();
-        $hardQuestion->content_id = $content->id;
+        $hardQuestion = $content->questions()->where('type', 'test')->where('level', 'hard')->first();
         $hardQuestion->text = $request->hardQuestion;
-        $hardQuestion->type = 'test';
-        $hardQuestion->level = 'hard';
         $hardQuestion->save();
 
+        $hardQuestionAnswers = $hardQuestion->answers()->get();
         $correctHardAnswer = $request->hardQuestionAnswers[0];
-        foreach ($request->hardQuestionAnswers as $answer) {
-            $hardQuestion->answers()->create([
-                'text' => $answer,
-                'is_correct' => $answer == $correctHardAnswer,
-            ]);
+        for ($i = 0; $i < count($hardQuestionAnswers); $i++) {
+            $hardQuestionAnswers[$i]->text = $request->hardQuestionAnswers[$i];
+            $hardQuestionAnswers[$i]->is_correct = $request->hardQuestionAnswers[$i] == $correctHardAnswer;
+            $hardQuestionAnswers[$i]->save();
         }
 
         return redirect()->route('courses.show', $courseId)->with('success', 'Content updated successfully');
@@ -517,5 +554,85 @@ class CoursesController extends Controller
         $content->delete();
 
         return redirect()->route('courses.show', $courseId)->with('success', 'Content deleted successfully');
+    }
+
+    public function enroll(Request $request, $courseId)
+    {
+        if (auth()->guest()) {
+            return redirect()->route('login');
+        }
+        $course = Course::findOrFail($courseId);
+        CourseAttend::create([
+            'user_JMBG' => auth()->user()->JMBG,
+            'course_id' => $course->id,
+        ]);
+
+        return redirect()->back()->with('success', 'You have successfully enrolled in this course');
+    }
+
+    public function unenroll(Request $request, $courseId)
+    {
+        if (auth()->guest()) {
+            return redirect()->route('login');
+        }
+        $course = Course::findOrFail($courseId);
+        $courseAttend = CourseAttend::where('user_JMBG', auth()->user()->JMBG)->where('course_id', $course->id)->first();
+        if ($courseAttend) {
+            $courseAttend->delete();
+        }
+
+        return redirect()->back()->with('success', 'You have successfully unenrolled from this course');
+    }
+
+    public function complete(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::user()->ownsCourse($course)) {
+            return redirect()->back();
+        }
+
+        $course->completed = true;
+        $course->save();
+
+        return redirect()->back()->with('success', 'You have marked this course as completed. Now, your students can do tests for this course.');
+    }
+
+    public function incomplete(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::user()->ownsCourse($course)) {
+            return redirect()->back();
+        }
+
+        $course->completed = false;
+        $course->save();
+
+        return redirect()->back()->with('success', 'You have marked this course as incomplete. Now, your students can not do tests for this course.');
+    }
+
+    public function completeContent(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+        if (!Auth::user()->attendsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $contentComplete = ContentComplete::where('user_JMBG', auth()->user()->JMBG)->where('content_id', $content->id)->first();
+        if ($contentComplete) {
+            return redirect()->back();
+        } else {
+            ContentComplete::create([
+                'user_JMBG' => auth()->user()->JMBG,
+                'content_id' => $content->id,
+            ]);
+        }
+
+        return redirect()->back();
     }
 }

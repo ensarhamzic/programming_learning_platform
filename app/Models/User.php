@@ -76,6 +76,33 @@ class User extends Authenticatable
         return $this->courses->contains($course);
     }
 
+    public function attends()
+    {
+        return $this->hasMany(CourseAttend::class);
+    }
+
+    public function attendsCourse($course)
+    {
+        $attend = $this->attends->where('course_id', $course->id)->first();
+        return $attend ? true : false;
+    }
+
+    public function completedContents()
+    {
+        return $this->hasMany(ContentComplete::class);
+    }
+
+    public function completedContent($content)
+    {
+        $complete = $this->completedContents->where('content_id', $content->id)->first();
+        return $complete ? true : false;
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(QuestionAnswer::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

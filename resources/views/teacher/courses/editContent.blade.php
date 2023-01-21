@@ -287,11 +287,11 @@
 
             <div class="d-flex justify-content-center align-items-center editActions">
               <button type="submit" class="btn btn-primary">
-                Add Content
+                Edit Content
               </button>
               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                 onclick="deleteClickHandler({{ $course->id }}, {{ $content->id }})">
-                Delete section
+                Delete Content
               </button>
             </div>
           </form>

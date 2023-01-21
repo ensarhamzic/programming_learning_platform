@@ -15,6 +15,7 @@ class Course extends Model
         'description',
         'image',
         'active',
+        'completed'
     ];
 
     public function user()
@@ -25,5 +26,10 @@ class Course extends Model
     public function sections()
     {
         return $this->hasMany(Section::class);
+    }
+
+    public function attends()
+    {
+        return $this->hasMany(CourseAttend::class);
     }
 }

@@ -28,6 +28,11 @@
     {{ Session::get('success') }}
   </div>
   @endif
+  @if(Session::has('error'))
+  <div class="alert alert-danger">
+    {{ Session::get('error') }}
+  </div>
+  @endif
   @auth
   @if (Auth::user()->ownsCourse($course))
   <div class="teacherActions">
@@ -123,11 +128,16 @@
     </div>
     @endforeach
     @if (Auth::user()->attendsCourse($course))
+    @if (Auth::user()->doneTest($course))
+    <a href="{{ route('courses.test.results', $course->id) }}" class="btn btn-secondary">See test results</a>
+    @else
+    <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary">Take course test</a>
+    @endif
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
       onclick="deleteClickHandler({{ $course->id }})">Leave this course</button>
     @endif
   </div>
-  @else
+  @elseif (auth()->guest() || (Auth::user()->isStudent()))
   <div class="alert alert-danger text-center notEnrolled">
     <p>
       You need to be enrolled in this course to see its content

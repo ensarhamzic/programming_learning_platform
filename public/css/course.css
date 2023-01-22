@@ -136,7 +136,16 @@ input[type="checkbox"] {
     margin: 20px auto;
 }
 
+.answer {
+    margin: 5px 0;
+    padding: 10px 0;
+}
+
 .answers {
-    line-height: 50px;
     font-size: 1.3rem;
+}
+
+.answers label,
+.answers input {
+    cursor: pointer;
 }

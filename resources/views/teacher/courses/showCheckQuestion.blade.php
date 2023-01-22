@@ -12,7 +12,11 @@
       @csrf
       @foreach ($question->answers as $answer)
       <div class=" answer">
-        <input type="radio" name="answer" id="answer{{ $answer->id }}" value="{{ $answer->id }}" />
+        @if ($loop->first)
+        <input type="radio" name="answer" id="answer{{ $answer->id }}" value="{{ $answer->id }}" checked />
+        @else
+        <input type="radio" name="answer" id="answer{{ $answer->id }}" value="{{ $answer->id }} " />
+        @endif
         <label for="answer{{ $answer->id }}">{{ $answer->text }}</label>
       </div>
       @endforeach

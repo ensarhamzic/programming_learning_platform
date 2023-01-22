@@ -101,40 +101,9 @@ class CoursesController extends Controller
         }
 
         $question = Question::where('content_id', $contentId)->where('type', 'check')->first();
+        $question->answers = $question->answers->shuffle();
 
         return view('teacher.courses.showCheckQuestion', compact('course', 'content', 'question'));
-    }
-
-    public function answerQuestion(Request $request, $courseId, $contentId)
-    {
-        $course = Course::findOrFail($courseId);
-        $sections = $course->sections()->get();
-
-        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
-        $content = Content::whereHas('section', function ($query) use ($sections) {
-            $query->whereIn('id', $sections->pluck('id'));
-        })->where('id', $contentId)->first();
-
-        if (!Auth::user()->attendsCourse($course) || !$content) {
-            return redirect()->back();
-        }
-
-        $question = Question::where('content_id', $contentId)->where('type', 'check')->first();
-        $answerId = $request->answer;
-
-        if ($question->answers->pluck('id')->contains($answerId)) {
-            $questionAnswer = new QuestionAnswer();
-            $questionAnswer->user_JMBG = auth()->user()->JMBG;
-            $questionAnswer->answer_id = $answerId;
-            $questionAnswer->save();
-
-            $contentComplete = new ContentComplete();
-            $contentComplete->user_JMBG = auth()->user()->JMBG;
-            $contentComplete->content_id = $contentId;
-            $contentComplete->save();
-        }
-
-        return redirect()->route('courses.show', $courseId);
     }
 
     /**
@@ -634,5 +603,150 @@ class CoursesController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function showTest($courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::user()->attendsCourse($course)) {
+            return redirect()->back();
+        }
+
+        if ($course->completed == false) {
+            return redirect()->back()->with('error', 'You can not do test for this course because it is not completed yet.');
+        }
+
+        $sections = $course->sections()->get();
+        $contents = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->get();
+
+        $checkQuestions = Question::whereHas('content', function ($query) use ($contents) {
+            $query->whereIn('id', $contents->pluck('id'));
+        })->where('type', 'check')->get();
+
+        $answerIds = [];
+        foreach ($checkQuestions as $checkQuestion) {
+            $answerIds = array_merge($answerIds, $checkQuestion->answers->pluck('id')->toArray());
+        }
+
+        $userAnswers = Auth::user()->answers()->get();
+        $userAnswers = $userAnswers->whereIn('answer_id', $answerIds);
+
+        if ($userAnswers->count() != $checkQuestions->count()) {
+            return redirect()->back()->with('error', 'You have not completed all the contents of this course.');
+        }
+
+        $correctAnswers = 0;
+        foreach ($userAnswers as $userAnswer)
+            if ($userAnswer->answer->is_correct)
+                $correctAnswers++;
+
+        $percentage = $correctAnswers / $checkQuestions->count() * 100;
+
+        $easyQuestions = [];
+        $mediumQuestions = [];
+        $hardQuestions = [];
+        foreach ($contents as $content) {
+            array_push($easyQuestions, $content->questions()->where('level', 'easy')->get());
+            array_push($mediumQuestions, $content->questions()->where('level', 'medium')->get());
+            array_push($hardQuestions, $content->questions()->where('level', 'hard')->get());
+        }
+
+
+        $questions = null;
+        if ($percentage >= 0 && $percentage < 50) {
+            $questions = $easyQuestions;
+        } else if ($percentage >= 50 && $percentage < 80) {
+            $questions = $mediumQuestions;
+        } else if ($percentage >= 80 && $percentage <= 100) {
+            $questions = $hardQuestions;
+        }
+
+        $questions = collect($questions)->flatten();
+        foreach ($questions as $question) {
+            $question->answers = $question->answers->shuffle();
+        }
+
+        return view('teacher.courses.test', compact('course', 'questions'));
+    }
+
+    public function questionHelp(Request $request, $questionId)
+    {
+        // get question answers, and return the correct one and second one return the wrong one
+        $question = Question::findOrFail($questionId);
+        $answers = $question->answers()->get();
+        $answers = $answers->shuffle();
+        $correctAnswer = $answers->where('is_correct', true)->first();
+        $incorrectAnswer = $answers->where('is_correct', false)->first();
+
+        $answers = [
+            'correct' => $correctAnswer,
+            'incorrect' => $incorrectAnswer,
+        ];
+
+        return response()->json($answers);
+    }
+
+    public function answerQuestion(Request $request, $courseId, $contentId)
+    {
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
+        if (!Auth::user()->attendsCourse($course) || !$content) {
+            return redirect()->back();
+        }
+
+        $question = Question::where('content_id', $contentId)->where('type', 'check')->first();
+        $answerId = $request->answer;
+
+        if ($question->answers->pluck('id')->contains($answerId)) {
+            $questionAnswer = new QuestionAnswer();
+            $questionAnswer->user_JMBG = auth()->user()->JMBG;
+            $questionAnswer->answer_id = $answerId;
+            $questionAnswer->save();
+
+            $contentComplete = new ContentComplete();
+            $contentComplete->user_JMBG = auth()->user()->JMBG;
+            $contentComplete->content_id = $contentId;
+            $contentComplete->save();
+        }
+
+        return redirect()->route('courses.show', $courseId);
+    }
+
+    public function endTest(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::user()->attendsCourse($course)) {
+            return redirect()->back();
+        }
+
+        $userAnswers = $request->only(array_filter($request->keys(), function ($key) {
+            return strpos($key, 'question') === 0;
+        }));
+
+        foreach ($userAnswers as $questionId => $answerId) {
+            $questionId = intval(str_replace('question', '', $questionId));
+            $answerId = intval($answerId);
+            $questionAnswer = new QuestionAnswer();
+            $questionAnswer->user_JMBG = auth()->user()->JMBG;
+            $questionAnswer->answer_id = $answerId;
+            if ($request['help' . $questionId] == 1)
+                $questionAnswer->help_used = true;
+            $questionAnswer->save();
+        }
+
+        return redirect()->route('courses.show', $courseId);
+    }
+
+    public function testResults(Request $request, $courseId)
+    {
+        //
     }
 }

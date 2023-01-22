@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Arr;
 
 class User extends Authenticatable
 {
@@ -101,6 +102,33 @@ class User extends Authenticatable
     public function answers()
     {
         return $this->hasMany(QuestionAnswer::class);
+    }
+
+    public function doneTest($course)
+    {
+        $rawAnswers = $this->answers;
+        // every element in allAnswers has answer_id, get the answer from every and put it in array called $all
+        $allAnswers = [];
+        foreach ($rawAnswers as $answer) {
+            array_push($allAnswers, $answer->answer);
+        }
+        $allAnswers = Arr::flatten($allAnswers);
+        $allQuestions = $course->questions();
+        $allQuestionAnswers = [];
+        foreach ($allQuestions as $question) {
+            array_push($allQuestionAnswers, $question->answers);
+        }
+        $allQuestionAnswers = Arr::flatten($allQuestionAnswers);
+
+        $done = false;
+        foreach ($allAnswers as $answer) {
+            if (in_array($answer, $allQuestionAnswers) && $answer->question->type == 'test') {
+                $done = true;
+                break;
+            }
+        }
+
+        return $done;
     }
 
     /**

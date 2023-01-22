@@ -71,3 +71,6 @@ Route::post('courses/{id}/content/{contentId}/question/{questionId}', [CoursesCo
 Route::post('courses/{id}/enroll', [CoursesController::class, 'enroll'])->name('courses.enroll');
 Route::delete('courses/{id}/unenroll', [CoursesController::class, 'unenroll'])->name('courses.unenroll');
 Route::post('courses/{id}/content/{contentId}/complete', [CoursesController::class, 'completeContent'])->name('courses.completeContent');
+Route::get('courses/{id}/test', [CoursesController::class, 'showTest'])->name('courses.test');
+Route::get('courses/{id}/test/results', [CoursesController::class, 'testResults'])->name('courses.test.results');
+Route::post('courses/{id}/test', [CoursesController::class, 'endTest'])->name('courses.test.end');

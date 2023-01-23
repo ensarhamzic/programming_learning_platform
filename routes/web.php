@@ -44,10 +44,13 @@ Route::middleware(['role:teacher'])->group(function () {
     Route::get('teacher/courses', [CoursesController::class, 'index'])->name('teacher.courses.index');
     Route::get('teacher/courses/create', [CoursesController::class, 'create'])->name('teacher.courses.create');
     Route::get('teacher/courses/{id}/edit', [CoursesController::class, 'edit'])->name('teacher.courses.edit');
+    Route::get('teacher/courses/{id}/attendants', [CoursesController::class, 'showAttendants'])->name('teacher.courses.attendants');
     Route::put('teacher/courses/{id}/update', [CoursesController::class, 'update'])->name('teacher.courses.update');
     Route::post('teacher/courses/store', [CoursesController::class, 'store'])->name('teacher.courses.store');
     Route::post('teacher/courses/{id}/toggleActive', [CoursesController::class, 'toggleActive'])->name('teacher.courses.toggleActive');
     Route::delete('teacher/courses/{id}/', [CoursesController::class, 'destroy'])->name('teacher.courses.destroy');
+
+    Route::get('teacher/courses/{id}/test/{userJMBG}/results', [CoursesController::class, 'userTestResults'])->name('teacher.courses.userTestResults');
 
     Route::get('teacher/courses/{id}/addSection', [CoursesController::class, 'addSection'])->name('teacher.courses.addSection');
     Route::post('teacher/courses/{id}/addSection', [CoursesController::class, 'storeSection'])->name('teacher.courses.storeSection');

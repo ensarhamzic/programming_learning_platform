@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Arr;
+
 use Auth;
 
 
@@ -17,6 +19,7 @@ use App\Models\Content;
 use App\Models\CourseAttend;
 use App\Models\ContentComplete;
 use App\Models\QuestionAnswer;
+use App\Models\User;
 
 class CoursesController extends Controller
 {
@@ -96,7 +99,7 @@ class CoursesController extends Controller
             $query->whereIn('id', $sections->pluck('id'));
         })->where('id', $contentId)->first();
 
-        if (!Auth::user()->attendsCourse($course) || !$content) {
+        if (!Auth::check() || !Auth::user()->attendsCourse($course) || !$content) {
             return redirect()->back();
         }
 
@@ -115,7 +118,7 @@ class CoursesController extends Controller
     public function edit($id)
     {
         $course = Course::findOrFail($id);
-        if (Auth::user()->ownsCourse($course))
+        if (Auth::check() && Auth::user()->ownsCourse($course) && $course->completed == 0)
             return view('teacher.courses.edit', compact('course'));
         return redirect()->back();
     }
@@ -129,7 +132,7 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!Auth::user()->ownsCourse(Course::find($id)))
+        if (!Auth::check() || !Auth::user()->ownsCourse(Course::find($id)))
             return redirect()->back();
 
         $request->validate([
@@ -183,7 +186,7 @@ class CoursesController extends Controller
         ]);
 
         $course = Course::find($courseId);
-        if (!Auth::user()->ownsCourse($course))
+        if (!Auth::check() || !Auth::user()->ownsCourse($course))
             return redirect()->back();
 
         $course->sections()->create([
@@ -198,7 +201,7 @@ class CoursesController extends Controller
         $course = Course::findOrFail($courseId);
         $section = $course->sections()->findOrFail($sectionId);
 
-        if (!Auth::user()->ownsCourse($course))
+        if (!Auth::check() ||  !Auth::user()->ownsCourse($course))
             return redirect()->back();
 
         return view('teacher.courses.editSection', ['course' => $course, 'section' => $section]);
@@ -213,7 +216,7 @@ class CoursesController extends Controller
         $course = Course::findOrFail($courseId);
         $section = $course->sections()->findOrFail($sectionId);
 
-        if (!Auth::user()->ownsCourse($course))
+        if (!Auth::check() ||  !Auth::user()->ownsCourse($course))
             return redirect()->back();
 
         $section->title = $request->title;
@@ -227,7 +230,7 @@ class CoursesController extends Controller
         $course = Course::findOrFail($courseId);
         $section = $course->sections()->findOrFail($sectionId);
 
-        if (!Auth::user()->ownsCourse($course))
+        if (!Auth::check() ||  !Auth::user()->ownsCourse($course))
             return redirect()->back();
 
         $section->delete();
@@ -239,7 +242,7 @@ class CoursesController extends Controller
     {
         $course = Course::findOrFail($courseId);
 
-        if (!Auth::user()->ownsCourse($course))
+        if (!Auth::check() || !Auth::user()->ownsCourse($course))
             return redirect()->back();
 
         return view('teacher.courses.addContent', ['course' => $course]);
@@ -386,7 +389,7 @@ class CoursesController extends Controller
 
 
 
-        if (!Auth::user()->ownsCourse($course) || !$content)
+        if (!Auth::check() || !Auth::user()->ownsCourse($course) || !$content)
             return redirect()->back();
 
         return view(
@@ -516,7 +519,7 @@ class CoursesController extends Controller
             $query->whereIn('id', $sections->pluck('id'));
         })->where('id', $contentId)->first();
 
-        if (!Auth::user()->ownsCourse($course) || !$content) {
+        if (!Auth::check() || !Auth::user()->ownsCourse($course) || !$content) {
             return redirect()->back();
         }
 
@@ -556,7 +559,7 @@ class CoursesController extends Controller
     public function complete(Request $request, $courseId)
     {
         $course = Course::findOrFail($courseId);
-        if (!Auth::user()->ownsCourse($course)) {
+        if (!Auth::check() || !Auth::user()->ownsCourse($course)) {
             return redirect()->back();
         }
 
@@ -588,7 +591,7 @@ class CoursesController extends Controller
         $content = Content::whereHas('section', function ($query) use ($sections) {
             $query->whereIn('id', $sections->pluck('id'));
         })->where('id', $contentId)->first();
-        if (!Auth::user()->attendsCourse($course) || !$content) {
+        if (!Auth::check() || !Auth::user()->attendsCourse($course) || !$content) {
             return redirect()->back();
         }
 
@@ -608,7 +611,7 @@ class CoursesController extends Controller
     public function showTest($courseId)
     {
         $course = Course::findOrFail($courseId);
-        if (!Auth::user()->attendsCourse($course)) {
+        if (!Auth::check() || !Auth::user()->attendsCourse($course)) {
             return redirect()->back();
         }
 
@@ -690,6 +693,9 @@ class CoursesController extends Controller
 
     public function answerQuestion(Request $request, $courseId, $contentId)
     {
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $course = Course::findOrFail($courseId);
         $sections = $course->sections()->get();
 
@@ -722,6 +728,9 @@ class CoursesController extends Controller
 
     public function endTest(Request $request, $courseId)
     {
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $course = Course::findOrFail($courseId);
         if (!Auth::user()->attendsCourse($course)) {
             return redirect()->back();
@@ -747,6 +756,82 @@ class CoursesController extends Controller
 
     public function testResults(Request $request, $courseId)
     {
-        //
+        $course = Course::findOrFail($courseId);
+        if (!Auth::check() || !Auth::user()->attendsCourse($course) || !Auth::user()->doneTest($course)) {
+            return redirect()->back();
+        }
+        $questions = collect($course->questions())->where('type', 'test');
+        $questionsIds = $questions->pluck('id');
+
+        $rawAnswers = Auth::user()->answers;
+        $allAnswers = [];
+        foreach ($rawAnswers as $answer) {
+            if ($answer->answer->question->type == "test")
+                array_push($allAnswers, $answer->answer);
+        }
+        $allAnswers = Arr::flatten($allAnswers);
+        $allAnswers = collect($allAnswers);
+        $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+        $level = $userAnswers->first()->question->level;
+
+        $questions = $questions->where('level', $level);
+        $user = Auth::user();
+
+        $points = 0;
+        foreach ($questions as $question) {
+            if (in_array($question->getCorrectAnswer()->id, $userAnswers->pluck('id')->toArray()))
+                if ($question->getCorrectAnswer()->userUsedHelp($user->JMBG))
+                    $points += 0.5;
+                else
+                    $points += 1;
+        }
+
+        return view('teacher.courses.testResults', compact('course', 'questions', 'userAnswers', 'user', 'points'));
+    }
+
+    public function userTestResults(Request $request, $courseId, $userJMBG)
+    {
+        $course = Course::findOrFail($courseId);
+        $user = User::where('JMBG', $userJMBG)->first();
+        if (!Auth::check() || !$user->attendsCourse($course) || !$user->doneTest($course)) {
+            return redirect()->back();
+        }
+        $questions = collect($course->questions())->where('type', 'test');
+        $questionsIds = $questions->pluck('id');
+
+        $rawAnswers = $user->answers;
+        $allAnswers = [];
+        foreach ($rawAnswers as $answer) {
+            if ($answer->answer->question->type == "test")
+                array_push($allAnswers, $answer->answer);
+        }
+        $allAnswers = Arr::flatten($allAnswers);
+        $allAnswers = collect($allAnswers);
+        $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+        $level = $userAnswers->first()->question->level;
+
+        $questions = $questions->where('level', $level);
+
+        $points = 0;
+        foreach ($questions as $question) {
+            if (in_array($question->getCorrectAnswer()->id, $userAnswers->pluck('id')->toArray()))
+                if ($question->getCorrectAnswer()->userUsedHelp($user->JMBG))
+                    $points += 0.5;
+                else
+                    $points += 1;
+        }
+
+        return view('teacher.courses.testResults', compact('course', 'questions', 'userAnswers', 'user', 'points'));
+    }
+
+    public function showAttendants(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::check() || !Auth::user()->ownsCourse($course)) {
+            return redirect()->back();
+        }
+
+        $attendants = $course->attends()->get();
+        return view('teacher.courses.attendants', compact('course', 'attendants'));
     }
 }

@@ -52,6 +52,7 @@
       <button type="submit" class="btn btn-danger">Mark as not completed</button>
     </form>
     @endif
+    <a class="btn btn-info" href="{{ route('teacher.courses.attendants', $course->id) }}">See course attendants</a>
   </div>
   @endif
   @endauth

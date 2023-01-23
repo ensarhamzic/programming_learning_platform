@@ -138,7 +138,7 @@ input[type="checkbox"] {
 
 .answer {
     margin: 5px 0;
-    padding: 10px 0;
+    padding: 10px 5px;
 }
 
 .answers {
@@ -148,4 +148,27 @@ input[type="checkbox"] {
 .answers label,
 .answers input {
     cursor: pointer;
+}
+
+.correctAnswer {
+    color: green;
+    background-color: rgb(157, 253, 157);
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.totalPoints {
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 500px;
+    padding: 20px 0;
+}
+
+.totalPoints span {
+    font-size: 2.5rem;
 }

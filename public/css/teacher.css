@@ -106,3 +106,20 @@
 .editActions {
     gap: 20px;
 }
+
+.attendantsTable td,
+.attendantsTable th {
+    text-align: center;
+}
+
+.attendantsTable th {
+    font-size: 1.5rem;
+}
+
+.attendantsTable td {
+    font-size: 1.2rem;
+}
+
+.attendantsTable a {
+    color: black;
+}

@@ -19,4 +19,13 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class);
     }
+
+    public function userUsedHelp($userJMBG)
+    {
+        $questionAnswer = QuestionAnswer::where('answer_id', $this->id)
+            ->where('user_JMBG', $userJMBG)
+            ->first();
+
+        return $questionAnswer->help_used;
+    }
 }

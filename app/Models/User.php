@@ -107,7 +107,6 @@ class User extends Authenticatable
     public function doneTest($course)
     {
         $rawAnswers = $this->answers;
-        // every element in allAnswers has answer_id, get the answer from every and put it in array called $all
         $allAnswers = [];
         foreach ($rawAnswers as $answer) {
             array_push($allAnswers, $answer->answer);
@@ -120,15 +119,68 @@ class User extends Authenticatable
         }
         $allQuestionAnswers = Arr::flatten($allQuestionAnswers);
 
-        $done = false;
+        $allQuestions = collect($allQuestions);
+        $allQuestionsIds = $allQuestions->pluck('id')->toArray();
+
+        $allQuestionAnswers = collect($allQuestionAnswers);
+        $allQuestionAnswersIds = $allQuestionAnswers->pluck('id')->toArray();
+
+
         foreach ($allAnswers as $answer) {
-            if (in_array($answer, $allQuestionAnswers) && $answer->question->type == 'test') {
-                $done = true;
-                break;
+            if (in_array($answer->id, $allQuestionAnswersIds) && $answer->question->type == 'test' && $answer->question->content->section->course->id == $course->id) {
+                return true;
             }
         }
 
-        return $done;
+        return false;
+    }
+
+    public function testPoints($course)
+    {
+        $questions = collect($course->questions())->where('type', 'test');
+        $questionsIds = $questions->pluck('id');
+
+        $rawAnswers = $this->answers;
+        $allAnswers = [];
+        foreach ($rawAnswers as $answer) {
+            if ($answer->answer->question->type == "test")
+                array_push($allAnswers, $answer->answer);
+        }
+        $allAnswers = Arr::flatten($allAnswers);
+        $allAnswers = collect($allAnswers);
+        $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+        $level = $userAnswers->first()->question->level;
+
+        $questions = $questions->where('level', $level);
+
+        $points = 0;
+        foreach ($questions as $question) {
+            if (in_array($question->getCorrectAnswer()->id, $userAnswers->pluck('id')->toArray()))
+                if ($question->getCorrectAnswer()->userUsedHelp($this->JMBG))
+                    $points += 0.5;
+                else
+                    $points += 1;
+        }
+
+        return $points;
+    }
+
+    public function testLevel($course)
+    {
+        $questions = collect($course->questions())->where('type', 'test');
+        $questionsIds = $questions->pluck('id');
+        $rawAnswers = $this->answers;
+        $allAnswers = [];
+        foreach ($rawAnswers as $answer) {
+            if ($answer->answer->question->type == "test")
+                array_push($allAnswers, $answer->answer);
+        }
+        $allAnswers = Arr::flatten($allAnswers);
+        $allAnswers = collect($allAnswers);
+        $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+        $level = $userAnswers->first()->question->level;
+
+        return $level;
     }
 
     /**

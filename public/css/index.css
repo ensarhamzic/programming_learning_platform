@@ -1,1 +1,65 @@
+.banner {
+    position: relative;
+    font-weight: bold;
+    overflow: hidden;
+}
 
+.bannerContent h1 {
+    font-size: 3rem;
+}
+
+.bannerContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    font-size: 2.5rem;
+    padding: 100px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.banner img {
+    width: 100%;
+}
+
+#main {
+    padding: 0 0 20px 0 !important;
+    margin: 0 !important;
+}
+
+.latestCourses {
+    margin-top: 50px;
+}
+
+.latestCourses h1 {
+    text-align: center;
+}
+
+.newsTitle {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.latestNews {
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 800px;
+}
+
+.latestNews h1 {
+    text-align: center;
+}
+
+.newsMessage {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    height: 1.2em;
+    white-space: nowrap;
+}

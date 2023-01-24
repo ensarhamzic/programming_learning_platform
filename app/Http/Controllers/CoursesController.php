@@ -534,6 +534,9 @@ class CoursesController extends Controller
             return redirect()->route('login');
         }
         $course = Course::findOrFail($courseId);
+        if ($course->active == 0) {
+            return redirect()->back()->with('error', 'You can not enroll in this course. Course is not active at the moment');
+        }
         CourseAttend::create([
             'user_JMBG' => auth()->user()->JMBG,
             'course_id' => $course->id,
@@ -611,7 +614,7 @@ class CoursesController extends Controller
     public function showTest($courseId)
     {
         $course = Course::findOrFail($courseId);
-        if (!Auth::check() || !Auth::user()->attendsCourse($course)) {
+        if (!Auth::check() || !Auth::user()->attendsCourse($course) || Auth::user()->doneTest($course)) {
             return redirect()->back();
         }
 
@@ -833,5 +836,12 @@ class CoursesController extends Controller
 
         $attendants = $course->attends()->get();
         return view('teacher.courses.attendants', compact('course', 'attendants'));
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->get('query');
+        $courses = Course::where('title', 'like', '%' . $search . '%')->get();
+        return view('courses.search', compact('courses', 'search'));
     }
 }

@@ -22,7 +22,6 @@
         integrity="sha512-cyzxRvewl+FOKTtpBzYjW6x6IAYUCZy3sGP40hn+DQkqeluGRCax7qztK2ImL64SA+C7kVWdLI6wvdlStawhyw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}" />
     @yield('options')
 
     <!-- Scripts -->
@@ -34,7 +33,8 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    AsyncLearners
+                    <img src="{{ asset('images/logo3.png') }}" alt="logo" height="80"
+                        class="d-inline-block align-text-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -83,6 +83,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('teacher.courses.create') }}">Create course</a>
                         </li>
+                        @elseif (Auth::user()->isStudent())
+                        <li class="nav-item">
+                            <form action="{{ route('courses.search') }}" method="GET">
+                                @csrf
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <x-search-icon />
+                                    </span>
+                                    <input type="text" name="query" class="form-control" placeholder="Course"
+                                        aria-label="course">
+                                </div>
+                            </form>
+                        </li>
                         @endif
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -107,7 +120,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main id="main" class="py-4">
             @yield('content')
         </main>
     </div>

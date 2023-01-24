@@ -57,7 +57,8 @@ class NotificationsController extends Controller
      */
     public function show($id)
     {
-        //
+        $notification = Notification::findOrFail($id);
+        return view('notifications.show', ['notification' => $notification]);
     }
 
     /**

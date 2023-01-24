@@ -62,6 +62,7 @@
           </div>
         </div>
         <div class="courseOptions">
+          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View course</a>
           <form method="POST" action="{{ route('teacher.courses.toggleActive', $course->id) }}">
             @csrf
             <button class="btn btn-info">Make active</button>

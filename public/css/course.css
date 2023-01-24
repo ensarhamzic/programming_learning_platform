@@ -172,3 +172,16 @@ input[type="checkbox"] {
 .totalPoints span {
     font-size: 2.5rem;
 }
+
+.foundCourses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.foundCourseContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}

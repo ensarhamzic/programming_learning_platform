@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminRegistrationsController;
 use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\IndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,7 @@ use App\Http\Controllers\CoursesController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [IndexController::class, 'index'])->name('index');
 
 Auth::routes();
 
@@ -68,6 +67,7 @@ Route::middleware(['role:teacher'])->group(function () {
     Route::delete('teacher/courses/{id}/deleteContent/{contentId}', [CoursesController::class, 'deleteContent'])->name('teacher.courses.deleteContent');
 });
 
+Route::get('courses/search', [CoursesController::class, 'search'])->name('courses.search');
 Route::get('courses/{id}', [CoursesController::class, 'show'])->name('courses.show');
 Route::get('courses/{id}/content/{contentId}/question', [CoursesController::class, 'showCheckQuestion'])->name('courses.checkQuestion');
 Route::post('courses/{id}/content/{contentId}/question/{questionId}', [CoursesController::class, 'answerQuestion'])->name('courses.questions.answer');
@@ -77,3 +77,4 @@ Route::post('courses/{id}/content/{contentId}/complete', [CoursesController::cla
 Route::get('courses/{id}/test', [CoursesController::class, 'showTest'])->name('courses.test');
 Route::get('courses/{id}/test/results', [CoursesController::class, 'testResults'])->name('courses.test.results');
 Route::post('courses/{id}/test', [CoursesController::class, 'endTest'])->name('courses.test.end');
+Route::get('notifications/{id}', [NotificationsController::class, 'show'])->name('notifications.show');

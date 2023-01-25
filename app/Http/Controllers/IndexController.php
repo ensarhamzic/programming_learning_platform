@@ -13,6 +13,10 @@ class IndexController extends Controller
     {
         $notifications = Notification::where('created_at', '>=', now()->subWeek())->orderBy('created_at', 'desc')->get();
         $courses = Course::where('created_at', '>=', now()->subWeek())->where('active', true)->orderBy('created_at', 'desc')->get();
-        return view('welcome', compact('notifications', 'courses'));
+        // get 5 best rated courses
+        $bestRatedCourses = $courses->sortByDesc(function ($course, $key) {
+            return $course->ratings->avg('rating');
+        })->take(5);
+        return view('welcome', compact('notifications', 'courses', 'bestRatedCourses'));
     }
 }

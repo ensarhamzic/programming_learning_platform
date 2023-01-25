@@ -185,3 +185,39 @@ input[type="checkbox"] {
     justify-content: space-between;
     gap: 20px;
 }
+
+.stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.star {
+    cursor: pointer;
+}
+
+.star-hover svg path {
+    fill: gold !important;
+}
+
+.usersRating {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.ratingsCount {
+    font-size: 1.2rem;
+}
+
+.ratingDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.ratingStar svg {
+    width: 40px;
+    height: auto;
+}

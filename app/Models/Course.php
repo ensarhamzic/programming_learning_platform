@@ -54,4 +54,9 @@ class Course extends Model
     {
         return $this->hasMany(CourseAttend::class);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

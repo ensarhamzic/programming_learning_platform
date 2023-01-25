@@ -68,6 +68,7 @@ Route::middleware(['role:teacher'])->group(function () {
 });
 
 Route::get('courses/search', [CoursesController::class, 'search'])->name('courses.search');
+Route::post('courses/{id}/rate', [CoursesController::class, 'rate'])->name('courses.rate');
 Route::get('courses/{id}', [CoursesController::class, 'show'])->name('courses.show');
 Route::get('courses/{id}/content/{contentId}/question', [CoursesController::class, 'showCheckQuestion'])->name('courses.checkQuestion');
 Route::post('courses/{id}/content/{contentId}/question/{questionId}', [CoursesController::class, 'answerQuestion'])->name('courses.questions.answer');

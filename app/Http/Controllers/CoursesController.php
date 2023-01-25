@@ -20,6 +20,7 @@ use App\Models\CourseAttend;
 use App\Models\ContentComplete;
 use App\Models\QuestionAnswer;
 use App\Models\User;
+use App\Models\Rating;
 
 class CoursesController extends Controller
 {
@@ -86,7 +87,8 @@ class CoursesController extends Controller
     public function show($id)
     {
         $course = Course::findOrFail($id);
-        return view('teacher.courses.show', compact('course'));
+        $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();
+        return view('teacher.courses.show', compact('course', 'userRating'));
     }
 
     public function showCheckQuestion(Request $request, $courseId, $contentId)
@@ -843,5 +845,29 @@ class CoursesController extends Controller
         $search = $request->get('query');
         $courses = Course::where('title', 'like', '%' . $search . '%')->get();
         return view('courses.search', compact('courses', 'search'));
+    }
+
+    public function rate(Request $request, $courseId)
+    {
+        $request->validate([
+            'rating' => 'required|numeric|min:1|max:5'
+        ]);
+        $course = Course::findOrFail($courseId);
+        if (!Auth::check() || !Auth::user()->attendsCourse($course))
+            return redirect()->back();
+
+        $existingRating = Rating::where('user_JMBG', Auth::user()->JMBG)->where('course_id', $courseId)->first();
+        if ($existingRating) {
+            $existingRating->rating = $request->rating;
+            $existingRating->save();
+            return redirect()->back();
+        }
+        $rating = new Rating();
+        $rating->user_JMBG = Auth::user()->JMBG;
+        $rating->course_id = $courseId;
+        $rating->rating = $request->rating;
+        $rating->save();
+
+        return redirect()->back();
     }
 }

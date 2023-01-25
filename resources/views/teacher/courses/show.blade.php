@@ -10,18 +10,97 @@
     document.getElementById("deleteForm").setAttribute("action", url);
   }
 
+  const rateClickHandler = (courseId) => {
+    var url = '{{ route("courses.rate", ":courseId") }}';
+    url = url.replace(':courseId', courseId);
+    document.getElementById("rateForm").setAttribute("action", url);
+  }
+
   const cbChange = (e) => {
     let checkBoxes = document.getElementsByClassName("completedCB")
     for(let i = 0; i < checkBoxes.length; i++) {
       checkBoxes[i].checked = true
     }
   }
+
+  const starClickHandler = (rating) => {
+    let ratingInput = document.getElementById("rating")
+    ratingInput.value = rating
+  }
+
+  const starOverHandler = (rating) => {
+    let stars = document.getElementsByClassName("star")
+    for(let i = 0; i < stars.length; i++) {
+      stars[i].classList.remove("star-hover")
+    }
+    for(let i = 0; i < rating; i++) {
+      stars[i].classList.add("star-hover")
+    }
+  }
+
+  const starOutHandler = () => {
+    let stars = document.getElementsByClassName("star")
+    let rating = document.getElementById("rating").value
+    for(let i = 0; i < stars.length; i++) {
+      stars[i].classList.remove("star-hover")
+    }
+    for(let i = 0; i < rating; i++) {
+      stars[i].classList.add("star-hover")
+    }
+  }
+
+
 </script>
 @endsection
 
 @section('content')
 <x-delete-modal title="Leave course" content="Are you sure you want to leave this course?"
   buttonContent="Leave course" />
+<div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rateModalLabel">Rate this course</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Rate this course from 1 to 5 stars</h3>
+        <div class="stars">
+          <div onclick="starClickHandler(1)" class="star" onmouseover="starOverHandler(1)"
+            onmouseout="starOutHandler()">
+            <x-star-icon />
+          </div>
+          <div onclick="starClickHandler(2)" class="star" onmouseover="starOverHandler(2)"
+            onmouseout="starOutHandler()">
+            <x-star-icon />
+          </div>
+          <div onclick="starClickHandler(3)" class="star" onmouseover="starOverHandler(3)"
+            onmouseout="starOutHandler()">
+            <x-star-icon />
+          </div>
+          <div onclick="starClickHandler(4)" class="star" onmouseover="starOverHandler(4)"
+            onmouseout="starOutHandler()">
+            <x-star-icon />
+          </div>
+          <div onclick="starClickHandler(5)" class="star" onmouseover="starOverHandler(5)"
+            onmouseout="starOutHandler()">
+            <x-star-icon />
+          </div>
+
+        </div>
+        <span class="starsError text-center text-danger" id="starsError"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form method="POST" id="rateForm">
+          @csrf
+          <input type="hidden" name="rating" id="rating" value="{{ $userRating ? $userRating->rating : 0 }}" />
+          <button class="btn btn-success">Rate</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="course">
   @if(Session::has('success'))
   <div class="alert alert-success">
@@ -59,6 +138,16 @@
   <h1>{{ $course->title }}</h1>
   <div class="bannerDiv">
     <img src="{{ $course->image }}" alt="Course banner">
+  </div>
+  <div class="usersRating">
+    <h3>Average course rating</h3>
+    <div class="ratingDiv">
+      <span>{{ $course->ratings->avg('rating') ? $course->ratings->avg('rating') : 0 }}</span>
+      <div class="ratingStar star-hover">
+        <x-star-icon />
+      </div>
+      <span class="ratingsCount">({{ $course->ratings->count() }})</span>
+    </div>
   </div>
   <div class="description">
     <p>
@@ -134,6 +223,8 @@
     @else
     <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary">Take course test</a>
     @endif
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#rateModal"
+      onclick="rateClickHandler({{ $course->id }})">Rate this course</button>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
       onclick="deleteClickHandler({{ $course->id }})">Leave this course</button>
     @endif
@@ -154,4 +245,19 @@
   @endif
 </div>
 
+@endsection
+
+
+@section('scripts')
+<script>
+  document.getElementById('rateForm').onsubmit = function(e) {
+e.preventDefault()
+let rating = document.getElementById("rating").value
+if(rating == 0 || !rating) {
+document.getElementById("starsError").innerHTML = "Please select a rating"
+return
+}
+this.submit()
+}
+</script>
 @endsection

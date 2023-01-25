@@ -63,3 +63,20 @@
     height: 1.2em;
     white-space: nowrap;
 }
+
+.ratingDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+}
+
+.ratingsCount {
+    font-size: 1.1rem;
+}
+
+.ratingStar svg {
+    width: 30px;
+    height: auto;
+}

@@ -3,6 +3,7 @@ body {
     background-image: url(../images/geometric.png);
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
     color: white !important;
+    word-wrap: break-word !important;
 }
 
 .navigationBar {
@@ -26,4 +27,7 @@ body {
 .modal-content,
 .modal-header {
     background-color: rgb(45, 45, 45) !important;
+}
+.iti__country-list {
+    color: black;
 }

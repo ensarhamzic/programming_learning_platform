@@ -103,7 +103,11 @@
             $notification->title }}</a>
         </h5>
         <p class="card-text newsMessage">{{ $notification->message }}</p>
-        <p class="card-text"><small>{{ $notification->created_at }}</small></p>
+        <p class="card-text"><small>{{ $notification->created_at }}
+            <a class="readMore" href="{{ route('notifications.show', $notification->id) }}">
+              read more
+            </a>
+          </small></p>
       </div>
     </div>
     @endforeach

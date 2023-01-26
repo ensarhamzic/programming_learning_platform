@@ -7,6 +7,7 @@ use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,3 +80,8 @@ Route::get('courses/{id}/test', [CoursesController::class, 'showTest'])->name('c
 Route::get('courses/{id}/test/results', [CoursesController::class, 'testResults'])->name('courses.test.results');
 Route::post('courses/{id}/test', [CoursesController::class, 'endTest'])->name('courses.test.end');
 Route::get('notifications/{id}', [NotificationsController::class, 'show'])->name('notifications.show');
+
+Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('profile/{jmbg}', [ProfileController::class, 'show'])->name('profile.show');

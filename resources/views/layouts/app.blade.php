@@ -22,6 +22,8 @@
         integrity="sha512-cyzxRvewl+FOKTtpBzYjW6x6IAYUCZy3sGP40hn+DQkqeluGRCax7qztK2ImL64SA+C7kVWdLI6wvdlStawhyw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+
     @yield('options')
 
     <!-- Scripts -->
@@ -30,10 +32,10 @@
 
 <body>
     <div id=" app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm navigationBar">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('images/logo3.png') }}" alt="logo" height="80"
+                    <img src="{{ asset('images/logo4.png') }}" alt="logo" height="100"
                         class="d-inline-block align-text-top">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -64,6 +66,9 @@
                         </li>
                         @endif
                         @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('profile.index') }}">My profile</a>
+                        </li>
                         @if (Auth::user()->isAdmin())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.registrations.index') }}">Registration

@@ -1,6 +1,5 @@
 .course {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: rgba(255, 255, 255, 0.4);
     border-radius: 5px;
     padding: 10px;
     width: 80%;
@@ -17,7 +16,7 @@
     margin: 10px auto;
     width: 600px;
     aspect-ratio: 16/9;
-    border: 1px solid black;
+    border: 1px solid #ccc;
     border-radius: 10px;
 }
 
@@ -71,23 +70,24 @@
 
 .oneContent .contentLink:link,
 .oneContent .contentLink:visited {
-    color: #000;
+    color: white;
 }
 
 .oneContent .contentLink:hover {
-    color: #000;
+    color: white;
     text-decoration: underline;
 }
 
 .contentActionLink,
 .contentActionLink:link,
 .contentActionLink:visited {
-    color: rgb(92, 92, 92);
+    color: #ccc;
+    transition: 0.2s;
     font-size: 1rem;
 }
 
 .contentActionLink:hover {
-    color: #000;
+    color: rgb(50, 50, 50);
 }
 
 .oneContent svg {
@@ -105,12 +105,12 @@
 .sectionTitleDiv a,
 .sectionTitleDiv a:link,
 .sectionTitleDiv a:visited {
-    color: rgb(92, 92, 92);
+    color: #ccc;
+    transition: 0.2s;
 }
 
 .sectionTitleDiv a:hover {
-    color: #000;
-    text-decoration: underline;
+    color: rgb(50, 50, 50);
 }
 
 .notEnrolled {
@@ -125,14 +125,15 @@ input[type="checkbox"] {
     -o-transform: scale(2); /* Opera */
     transform: scale(2);
     padding: 10px;
+    accent-color: #feba55;
 }
 
 .checkQuestion {
+    background: rgba(255, 255, 255, 0.4) !important;
     width: 800px;
     padding: 20px 50px;
     background-color: #fff;
     border-radius: 10px;
-    border: 1px solid #ccc;
     margin: 20px auto;
 }
 
@@ -162,8 +163,7 @@ input[type="checkbox"] {
     font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
-    background: white;
-    border: 1px solid #ccc;
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 10px;
     width: 500px;
     padding: 20px 0;
@@ -197,7 +197,7 @@ input[type="checkbox"] {
 }
 
 .star-hover svg path {
-    fill: gold !important;
+    fill: #feba55 !important;
 }
 
 .usersRating {

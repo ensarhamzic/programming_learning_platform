@@ -54,6 +54,18 @@
     width: 80%;
 }
 
+.userImage {
+    width: 100px;
+    margin: 10px auto;
+    border-radius: 50%;
+}
+
+.userImage img {
+    width: 100%;
+    border-radius: 50%;
+    border: 3px solid rgb(106, 106, 106);
+}
+
 .oneNotification {
     display: flex;
     flex-direction: column;

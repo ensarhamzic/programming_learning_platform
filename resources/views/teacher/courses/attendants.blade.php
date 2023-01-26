@@ -14,7 +14,7 @@
           <h3>Course attendants</h3>
         </div>
         <div class="card-body">
-          <table class="table table-striped attendantsTable">
+          <table class="table attendantsTable">
             <thead>
               <tr>
                 <th>Name</th>

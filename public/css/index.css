@@ -30,8 +30,12 @@
     margin: 0 !important;
 }
 
+.carousel-item img {
+    border-radius: 10px !important;
+}
 .latestCourses {
-    margin-top: 50px;
+    margin: 50px auto;
+    width: 900px;
 }
 
 .latestCourses h1 {
@@ -45,11 +49,24 @@
 }
 
 .latestNews {
+    color: white !important;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 800px;
+}
+
+.latestNews a,
+.latestNews a:active,
+.latestNews a:link {
+    color: white !important;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.latestNews a:hover {
+    color: #feba55 !important;
 }
 
 .latestNews h1 {

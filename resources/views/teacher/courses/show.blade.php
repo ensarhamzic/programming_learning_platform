@@ -259,5 +259,16 @@ return
 }
 this.submit()
 }
+
+window.onload = function() {
+  let stars = document.getElementsByClassName("star")
+    let rating = document.getElementById("rating").value
+    for(let i = 0; i < stars.length; i++) {
+      stars[i].classList.remove("star-hover")
+    }
+    for(let i = 0; i < rating; i++) {
+      stars[i].classList.add("star-hover")
+    }
+}
 </script>
 @endsection

@@ -86,6 +86,8 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
+        if (!Auth::check())
+            return redirect()->route('login');
         $course = Course::findOrFail($id);
         $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();
         return view('teacher.courses.show', compact('course', 'userRating'));
@@ -756,7 +758,7 @@ class CoursesController extends Controller
             $questionAnswer->save();
         }
 
-        return redirect()->route('courses.show', $courseId);
+        return redirect()->route('courses.test.results', $courseId);
     }
 
     public function testResults(Request $request, $courseId)

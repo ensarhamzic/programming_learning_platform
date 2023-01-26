@@ -103,7 +103,7 @@
             $notification->title }}</a>
         </h5>
         <p class="card-text newsMessage">{{ $notification->message }}</p>
-        <p class="card-text"><small class="text-muted">{{ $notification->created_at }}</small></p>
+        <p class="card-text"><small>{{ $notification->created_at }}</small></p>
       </div>
     </div>
     @endforeach

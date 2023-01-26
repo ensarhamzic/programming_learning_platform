@@ -135,7 +135,13 @@
             courseImageError.style.display = "block";
             formValid = false;
         } else {
+          if(courseImage.files[0].type.match(/^image\//)) {
             courseImageError.style.display = "none";
+          } else {
+            courseImageError.innerHTML = "Please select a valid image";
+            courseImageError.style.display = "block";
+            formValid = false;
+          }
         }
 
 

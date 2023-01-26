@@ -4,10 +4,25 @@
 @section('options')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<link rel="stylesheet" href="{{ asset('css/auth.css') }}" />
 
 @endsection
 
 @section('content')
+<div style="display:none;" id="cropModal">
+    <div class="overlay"></div>
+    <div class="card cropModal">
+        <div class="card-header">Crop banner image</div>
+        <div class="card-body cropDiv">
+            <img id="image" class="image">
+        </div>
+        <div class="card-footer d-flex justify-content-center align-items-center">
+            <button class="btn btn-success cropBtn" id="cropBtn">Crop image</button>
+        </div>
+    </div>
+</div>
+
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -122,6 +137,27 @@
                                 <span class="invalid-feedback" role="alert" id="emailError"></span>
                             </div>
                         </div>
+
+
+                        <div class="row mb-3">
+                            <label for="description" class="col-md-4 col-form-label text-md-end">Profile picture</label>
+
+                            <div class="col-md-6">
+                                <input id="profilePicture" type="file"
+                                    class="form-control @error('profilePicture') is-invalid @enderror"
+                                    name="profilePicture" required rows="10" autocomplete="current-profilePicture"
+                                    accept="image/png, image/jpeg, image/jpg" />
+
+                                @error('imageURI')
+                                <span class="invalid-feedback" role="alert" id="imageServerError">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                                <span class="invalid-feedback" role="alert" id="profilePictureError"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="imageURI" value="" id="imageURI" />
 
                         <div class="row mb-3">
                             <label for="birth_place" class="col-md-4 col-form-label text-md-end">Birth Place</label>
@@ -274,9 +310,12 @@
         const confirmPassword = document.getElementById("password-confirm");
         const confirmPasswordError = document.getElementById("confirmPaswordError");
 
+        const profilePicture = document.getElementById("profilePicture");
+        const profilePictureError = document.getElementById("profilePictureError");
+
+
         // jmbg should be 13 characters and no letters
         if (jmbg.value.length != 13 || isNaN(jmbg.value)) {
-            console.log('a')
             jmbgError.innerHTML = "JMBG should be 13 characters and no letters";
             jmbgError.style.display = "block";
             formValid = false;
@@ -365,6 +404,17 @@
             emailError.innerHTML = "";
         }
 
+        if (profilePicture.files.length > 0) {
+            if (!profilePicture.files[0].type.match(/^image\//)) {
+                profilePictureError.innerHTML = "Profile picture must be an image";
+                profilePictureError.style.display = "block";
+                formValid = false;
+            } else {
+                profilePictureError.innerHTML = "";
+            }
+        }
+
+
         if(formValid) {
             this.submit();
         }
@@ -394,9 +444,32 @@
             console.log(phoneInput.getNumber())
             document.getElementById("fullNum").value = phoneInput.getNumber();
         };
-
-        document.getElementById("mobileNumberServerError").style.display = "block";
+        let mobileError = document.getElementById('mobileNumberServerError')
+        if(mobileError) {
+            mobileError.style.display = "block";
+        }
     }
+
+
+    let profilePicture = document.getElementById('profilePicture');
+  let newProfilePicture = profilePicture.cloneNode(true);
+  profilePicture.parentNode.replaceChild(newProfilePicture, profilePicture);
+  newProfilePicture.addEventListener('change', function () {
+    if (this.files && this.files[0] && this.files[0].type.match(/^image\//)) {
+      document.getElementById('cropModal').style.display = 'block';
+      let image =  document.getElementById('image')
+      image.src = URL.createObjectURL(this.files[0])
+      const cropper = new Cropper(image, { aspectRatio: 1 / 1});
+      let cropBtn = document.getElementById('cropBtn');
+      let newCropBtn = cropBtn.cloneNode(true);
+      cropBtn.parentNode.replaceChild(newCropBtn, cropBtn);
+      newCropBtn.addEventListener('click', () => {
+        let imageURI = cropper.getCroppedCanvas().toDataURL("image/png");
+        document.getElementById('imageURI').value = imageURI;
+        document.getElementById('cropModal').style.display = 'none';
+      });
+    }
+  });
 
     
 </script>

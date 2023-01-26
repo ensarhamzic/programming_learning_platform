@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('birth_country');
             $table->date("birth_date");
             $table->string("mobile_number")->unique();
-            $table->string("image_url")->nullable();
+            $table->string("profile_picture")->default("");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('approved')->default(false);

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Auth;
 
 use App\Models\User;
+use Illuminate\Validation\Rule;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -58,6 +62,7 @@ class ProfileController extends Controller
             $stringId = '0' . $stringId;
         }
         $user = User::findOrfail($stringId);
+        if (!$user->approved) abort(404);
 
         return view('profile.show', compact('user'));
     }
@@ -68,9 +73,47 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        if (!Auth::check())
+            return redirect()->route('login');
+
+        if (!Auth::user()->approved) abort(404);
+
+        return view('profile.edit');
+    }
+
+    public function settings()
+    {
+        if (!Auth::check())
+            return redirect()->route('login');
+
+        if (!Auth::user()->approved) abort(404);
+
+        return view('profile.settings');
+    }
+
+    public function changePassword(Request $request)
+    {
+        if (!Auth::check())
+            return redirect()->route('login');
+
+        if (!Auth::user()->approved) abort(404);
+
+        $request->validate([
+            'currentPassword' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        if (!Auth::user()->checkPassword($request->currentPassword)) {
+            return redirect()->back()->withErrors(['currentPassword' => 'Wrong password']);
+        }
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('profile.settings')->with('success', 'Password changed successfully');
     }
 
     /**
@@ -80,9 +123,55 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        if (!Auth::user()->approved) abort(404);
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'string', 'max:1',  Rule::in(['M', 'F'])],
+            'birth_place' => ['required', 'string', 'max:255'],
+            'birth_country' => ['required', 'string', 'max:255'],
+            'birth_date' => ['required', 'date'],
+        ]);
+
+        if ($request->email != Auth::user()->email) {
+            $request->validate([
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            ]);
+        }
+
+        if ($request->fullNum && $request->fullNum != Auth::user()->mobile_number) {
+            $request->validate([
+                'fullNum' => ['required', 'string', 'max:255', 'validPhone', 'unique:users,mobile_number'],
+            ]);
+        }
+
+        $image_uploaded = null;
+        if ($request->imageURI) {
+            $image_uploaded = Cloudinary::upload($request->imageURI)->getSecurePath();
+        }
+
+        $username = strtolower($request->name . $request->surname);
+        $similarUsernames = User::where('username', 'like', $username . '%')->where('username', "!=", Auth::user()->username)->get();
+        if (count($similarUsernames) > 0) {
+            $username = $username . (count($similarUsernames) + 1);
+        }
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->username = $username;
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->mobile_number = $request->fullNum ? $request->fullNum : $user->mobile_number;
+        $user->birth_place = $request->birth_place;
+        $user->birth_country = $request->birth_country;
+        $user->birth_date = $request->birth_date;
+        $user->profile_picture = $image_uploaded ? $image_uploaded : $user->profile_picture;
+        $user->save();
+
+        return redirect()->route('profile.index');
     }
 
     /**
@@ -91,9 +180,13 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        $user = Auth::user();
+
+        $user->delete();
+
+        return redirect()->route('login');
     }
 
     public function showTeachingCourses($jmbg)

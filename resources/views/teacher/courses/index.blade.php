@@ -33,10 +33,10 @@
           </div>
         </div>
         <div class="courseOptions">
-          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View course</a>
+          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary customBtn">View course</a>
           <form method="POST" action="{{ route('teacher.courses.toggleActive', $course->id) }}">
             @csrf
-            <button class="btn btn-info">Make inactive</button>
+            <button class="btn btn-secondary">Make inactive</button>
           </form>
         </div>
       </div>
@@ -62,10 +62,10 @@
           </div>
         </div>
         <div class="courseOptions">
-          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">View course</a>
+          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary customBtn">View course</a>
           <form method="POST" action="{{ route('teacher.courses.toggleActive', $course->id) }}">
             @csrf
-            <button class="btn btn-info">Make active</button>
+            <button class="btn btn-info customBtn">Make active</button>
           </form>
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
             onclick="deleteClickHandler({{ $course->id }})">Delete Course</button>

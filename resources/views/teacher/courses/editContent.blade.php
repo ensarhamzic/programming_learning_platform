@@ -286,7 +286,7 @@
 
 
             <div class="d-flex justify-content-center align-items-center editActions">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary customBtn">
                 Edit Content
               </button>
               <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"

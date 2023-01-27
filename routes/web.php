@@ -83,6 +83,8 @@ Route::get('notifications/{id}', [NotificationsController::class, 'show'])->name
 
 Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::get('profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
+Route::put('profile/settings', [ProfileController::class, 'changePassword'])->name('profile.changePassword');
 Route::put('profile/edit', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 Route::get('profile/{jmbg}', [ProfileController::class, 'show'])->name('profile.show');

@@ -26,7 +26,7 @@
   <label for="searchInput">Search</label>
   <input type="text" class="form-control" id="searchInput" placeholder="Name, surname, username or email" name="search"
     value="{{ request()->get('search') }}">
-  <button type="submit" class="btn btn-primary">Search</button>
+  <button type="submit" class="btn btn-primary customBtn">Search</button>
 </form>
 <div class="usersList">
   @if (count($users) == 0)

@@ -86,10 +86,10 @@ class CoursesController extends Controller
      */
     public function show($id)
     {
-        if (!Auth::check())
-            return redirect()->route('login');
         $course = Course::findOrFail($id);
-        $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();
+        $userRating = null;
+        if (Auth::check())
+            $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();
         return view('teacher.courses.show', compact('course', 'userRating'));
     }
 

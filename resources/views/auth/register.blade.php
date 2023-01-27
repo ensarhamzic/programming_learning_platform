@@ -17,7 +17,7 @@
             <img id="image" class="image">
         </div>
         <div class="card-footer d-flex justify-content-center align-items-center">
-            <button class="btn btn-success cropBtn" id="cropBtn">Crop image</button>
+            <button class="btn btn-success cropBtn customBtn" id="cropBtn">Crop image</button>
         </div>
     </div>
 </div>
@@ -265,7 +265,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary customBtn">
                                     {{ __('Register') }}
                                 </button>
                             </div>

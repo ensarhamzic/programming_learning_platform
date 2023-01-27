@@ -20,7 +20,7 @@
         <label for="answer{{ $answer->id }}">{{ $answer->text }}</label>
       </div>
       @endforeach
-      <button type="submit" class="btn btn-primary">Submit and mark content as completed</button>
+      <button type="submit" class="btn btn-primary customBtn">Submit and mark content as completed</button>
     </form>
   </div>
 </div>

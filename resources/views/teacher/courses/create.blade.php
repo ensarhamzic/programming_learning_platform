@@ -14,7 +14,7 @@
       <img id="image" class="image">
     </div>
     <div class="card-footer d-flex justify-content-center align-items-center">
-      <button class="btn btn-success cropBtn" id="cropBtn">Crop image</button>
+      <button class="btn btn-success cropBtn customBtn" id="cropBtn">Crop image</button>
     </div>
   </div>
 </div>
@@ -85,7 +85,7 @@
             <input type="hidden" name="imageURI" value="" id="imageURI" />
 
             <div class="d-flex justify-content-center align-items-center">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary customBtn">
                 Create Course
               </button>
             </div>

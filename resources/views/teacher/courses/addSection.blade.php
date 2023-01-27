@@ -32,7 +32,7 @@
             </div>
 
             <div class="d-flex justify-content-center align-items-center">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary customBtn">
                 Add Section
               </button>
             </div>

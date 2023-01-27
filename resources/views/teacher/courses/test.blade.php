@@ -64,7 +64,7 @@
       @endforeach
       <input type="hidden" name="help{{ $question->id }}" value="0" />
       <div class="help d-flex justify-content-end" id="helpDiv{{ $question->id }}">
-        <button class="btn btn-success" type="button" onclick="helpHandler({{ $question->id }})">
+        <button class="btn btn-success customBtn" type="button" onclick="helpHandler({{ $question->id }})">
           Get help
         </button>
       </div>
@@ -72,7 +72,7 @@
   </div>
   @endforeach
   <div class="d-flex justify-content-center">
-    <button class="btn btn-primary" type="submit">End Test</button>
+    <button class="btn btn-primary customBtn" type="submit">End Test</button>
   </div>
 </form>
 @endsection

@@ -50,7 +50,7 @@
         <form method="POST" action="{{ route('admin.registrations.update', [$user->JMBG]) }}">
           @csrf
           @method("PATCH")
-          <button type="submit" class="btn btn-info">Approve</button>
+          <button type="submit" class="btn btn-info customBtn">Approve</button>
         </form>
       </div>
     </div>

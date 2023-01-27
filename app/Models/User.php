@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Arr;
 
+use Illuminate\Support\Facades\Hash;
+
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -186,6 +190,11 @@ class User extends Authenticatable
         $level = $userAnswers->first()->question->level;
 
         return $level;
+    }
+
+    public function checkPassword($password)
+    {
+        return Hash::check($password, $this->password);
     }
 
     /**

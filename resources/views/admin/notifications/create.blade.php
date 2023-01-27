@@ -42,8 +42,8 @@
   </div>
 
   <div class="notificationActions">
-    <button type="submit" class="btn btn-success">Create</button>
-    <a class="btn btn-danger" href="{{ route('admin.notifications.index') }}">Cancel</a>
+    <button type="submit" class="btn btn-success customBtn">Create</button>
+    <a class="btn btn-secondary" href="{{ route('admin.notifications.index') }}">Cancel</a>
   </div>
 </form>
 @endsection

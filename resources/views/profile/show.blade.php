@@ -16,6 +16,9 @@
         <small>{{ $user->role->name }}</small>
         <h1>{{ $user->name }} {{ $user->surname }}</h1>
         <p><span>@</span>{{ $user->username }}</p>
+        @if (Auth::user()->JMBG == $user->JMBG)
+        <a href="{{ route('profile.edit') }}" class="btn btn-primary customBtn">Edit profile</a>
+        @endif
       </div>
     </div>
   </div>
@@ -38,7 +41,7 @@
             <h5 class="card-title">{{ $course->title }}</h5>
           </div>
 
-          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary">Go to course</a>
+          <a href="{{ route('courses.show', $course->id) }}" class="btn btn-primary customBtn">Go to course</a>
         </div>
       </div>
       @endforeach
@@ -68,7 +71,7 @@
             <p class="card-text">By: {{ $attend->course->user->name }} {{ $attend->course->user->surname }}</p>
           </div>
 
-          <a href="{{ route('courses.show', $attend->course->id) }}" class="btn btn-primary">Go to course</a>
+          <a href="{{ route('courses.show', $attend->course->id) }}" class="btn btn-primary customBtn">Go to course</a>
         </div>
       </div>
       @endforeach

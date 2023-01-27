@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="banner">
-  <img src="{{ asset('images/banner.jpg') }}" alt="image">
+  <img src="{{ asset('images/banner3.jpg') }}" alt="image">
   <div class="bannerContent">
     <h1>AsyncLearners</h1>
     <p>Your programming journey starts here!</p>
@@ -50,6 +50,8 @@
     </div>
   </div>
 
+  <hr />
+
 
   <div class="latestCourses">
     <h1>Best rated courses</h1>
@@ -92,6 +94,8 @@
       </button>
     </div>
   </div>
+
+  <hr />
 
   <div class="latestNews">
     <h1>Latest news</h1>

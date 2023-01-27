@@ -36,3 +36,26 @@ body {
     background-color: rgba(0, 0, 0, 0.5) !important;
     border-radius: 10px;
 }
+
+.btn {
+    border: none !important;
+}
+
+.btn-secondary {
+    background: rgb(37, 37, 37) !important;
+}
+
+.btn-secondary:hover {
+    background: rgb(55, 55, 55) !important;
+}
+
+.customBtn {
+    display: block;
+    background-color: #feba55 !important;
+    color: white !important;
+}
+
+.customBtn:hover {
+    background-color: #f7a429 !important;
+    color: white !important;
+}

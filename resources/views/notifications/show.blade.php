@@ -12,7 +12,7 @@
   <div class="card-body">
     <h5 class="card-title">{{ $notification->title }}</h5>
     <p class="card-text">{{ $notification->message }}</p>
-    <a href="{{ route('index') }}" class="btn btn-primary">Home</a>
+    <a href="{{ route('index') }}" class="btn btn-primary customBtn">Home</a>
   </div>
 </div>
 @endsection

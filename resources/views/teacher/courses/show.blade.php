@@ -95,7 +95,7 @@
         <form method="POST" id="rateForm">
           @csrf
           <input type="hidden" name="rating" id="rating" value="{{ $userRating ? $userRating->rating : 0 }}" />
-          <button class="btn btn-success">Rate</button>
+          <button class="btn btn-success customBtn">Rate</button>
         </form>
       </div>
     </div>
@@ -116,22 +116,23 @@
   @if (Auth::user()->ownsCourse($course))
   <div class="teacherActions">
     @if (!$course->completed)
-    <a class="btn btn-primary" href="{{ route('teacher.courses.addContent', $course->id) }}">Add Content</a>
-    <a class="btn btn-info" href="{{ route('teacher.courses.addSection', $course->id) }}">Add Section</a>
-    <a class="btn btn-secondary" href="{{ route('teacher.courses.edit', $course->id) }}">Edit Course</a>
+    <a class="btn btn-primary customBtn" href="{{ route('teacher.courses.addContent', $course->id) }}">Add Content</a>
+    <a class="btn btn-info customBtn" href="{{ route('teacher.courses.addSection', $course->id) }}">Add Section</a>
+    <a class="btn btn-secondary customBtn" href="{{ route('teacher.courses.edit', $course->id) }}">Edit Course</a>
     @endif
     @if (!$course->completed)
     <form method="POST" action="{{ route('teacher.courses.complete', $course->id) }}">
       @csrf
-      <button type="submit" class="btn btn-success">Mark as completed</button>
+      <button type="submit" class="btn btn-success customBtn">Mark as completed</button>
     </form>
     @else
     <form method="POST" action="{{ route('teacher.courses.incomplete', $course->id) }}">
       @csrf
-      <button type="submit" class="btn btn-danger">Mark as not completed</button>
+      <button type="submit" class="btn btn-danger customBtn">Mark as not completed</button>
     </form>
     @endif
-    <a class="btn btn-info" href="{{ route('teacher.courses.attendants', $course->id) }}">See course attendants</a>
+    <a class="btn btn-info customBtn" href="{{ route('teacher.courses.attendants', $course->id) }}">See course
+      attendants</a>
   </div>
   @endif
   @endauth
@@ -219,11 +220,11 @@
     @endforeach
     @if (Auth::user()->attendsCourse($course))
     @if (Auth::user()->doneTest($course))
-    <a href="{{ route('courses.test.results', $course->id) }}" class="btn btn-secondary">See test results</a>
+    <a href="{{ route('courses.test.results', $course->id) }}" class="btn btn-secondary customBtn">See test results</a>
     @else
-    <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary">Take course test</a>
+    <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary customBtn">Take course test</a>
     @endif
-    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#rateModal"
+    <button type="button" class="btn btn-info customBtn" data-bs-toggle="modal" data-bs-target="#rateModal"
       onclick="rateClickHandler({{ $course->id }})">Rate this course</button>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
       onclick="deleteClickHandler({{ $course->id }})">Leave this course</button>

@@ -18,7 +18,7 @@
 
 <h1 class='admin_h1'>Notifications</h1>
 <div class="notificationActions">
-  <a class="btn btn-success" href="{{ route('admin.notifications.create') }}">Create notification</a>
+  <a class="btn btn-success customBtn" href="{{ route('admin.notifications.create') }}">Create notification</a>
 </div>
 
 

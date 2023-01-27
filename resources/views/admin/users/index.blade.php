@@ -34,16 +34,18 @@
   @else
   @foreach ($users as $user)
   <div class="oneUser">
-    <div class="userImage">
-      <img src="{{ $user->getProfilePicture() }}" alt="user image" class="userImage">
+    <div>
+      <div class="userImage">
+        <img src="{{ $user->getProfilePicture() }}" alt="user image" class="userImage">
+      </div>
+      <h2 class='admin_h2'>{{ $user->name }} {{ $user->surname }}</h2>
+      <p class='admin_p'>JMBG: {{ $user->JMBG }}</p>
+      <p class='admin_p'>username: {{ $user->username }}</p>
+      <p class='admin_p'>email: {{ $user->email }}</p>
+      <p class='admin_p'>Created at: {{ $user->created_at }}</p>
+      <p class='admin_p'>Mobile number: {{ $user->mobile_number }}</p>
+      <p class='admin_p'>Role: {{ $user->role->name }}</p>
     </div>
-    <h2 class='admin_h2'>{{ $user->name }} {{ $user->surname }}</h2>
-    <p class='admin_p'>JMBG: {{ $user->JMBG }}</p>
-    <p class='admin_p'>username: {{ $user->username }}</p>
-    <p class='admin_p'>email: {{ $user->email }}</p>
-    <p class='admin_p'>Created at: {{ $user->created_at }}</p>
-    <p class='admin_p'>Mobile number: {{ $user->mobile_number }}</p>
-    <p class='admin_p'>Role: {{ $user->role->name }}</p>
     <div class="delDiv">
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
         onclick="deleteClickHandler({{ $user->JMBG }})">Delete User</button>

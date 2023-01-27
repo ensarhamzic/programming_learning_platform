@@ -9,6 +9,12 @@
     gap: 20px;
 }
 
+.oneUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .oneUser,
 .oneNotification {
     border: 1px solid rgb(61, 61, 61);
@@ -55,7 +61,7 @@
 }
 
 .userImage {
-    width: 100px;
+    width: 150px;
     margin: 10px auto;
     border-radius: 50%;
 }

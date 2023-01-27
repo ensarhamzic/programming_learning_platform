@@ -18,7 +18,7 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Surname</th>
+                <th>Email</th>
                 <th>Test type</th>
                 <th>Test points</th>
               </tr>
@@ -26,8 +26,12 @@
             <tbody>
               @foreach ($attendants as $attendant)
               <tr>
-                <td>{{ $attendant->user->name }}</td>
-                <td>{{ $attendant->user->surname }}</td>
+                <td>
+                  <a href="{{ route('profile.show', $attendant->user->JMBG) }}">
+                    {{ $attendant->user->name }} {{ $attendant->user->surname }}
+                  </a>
+                </td>
+                <td>{{ $attendant->user->email }}</td>
 
                 @if (!$attendant->user->doneTest($course))
                 <td>/</td>

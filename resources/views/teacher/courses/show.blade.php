@@ -136,7 +136,24 @@
   </div>
   @endif
   @endauth
-  <h1>{{ $course->title }}</h1>
+
+  <div class="courseTitle">
+    <h1>{{ $course->title }}</h1>
+
+    <div class="courseOwner">
+      <div>
+        <a href="{{ route('profile.show', $course->user->JMBG) }}"><img src={{ $course->user->getProfilePicture() }}
+          alt="Profile picture" /> </a>
+      </div>
+      <div>
+        <a href="{{ route('profile.show', $course->user->JMBG) }}">
+          <p>{{ $course->user->name }} {{ $course->user->surname }}</p>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
   <div class="bannerDiv">
     <img src="{{ $course->image }}" alt="Course banner">
   </div>

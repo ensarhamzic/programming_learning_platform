@@ -221,3 +221,31 @@ input[type="checkbox"] {
     width: 40px;
     height: auto;
 }
+
+.courseOwner {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.courseOwner img {
+    width: 40px;
+}
+
+.courseOwner p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.courseOwner a,
+.courseOwner a:link,
+.courseOwner a:visited,
+.courseOwner a:active {
+    color: white !important;
+    text-decoration: none !important;
+}

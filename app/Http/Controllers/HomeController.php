@@ -33,8 +33,7 @@ class HomeController extends Controller
                 return redirect('/teacher/courses');
                 break;
             default:
-                break;
+                return redirect('/profile');
         }
-        return view('home');
     }
 }

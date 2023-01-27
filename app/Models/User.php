@@ -104,6 +104,11 @@ class User extends Authenticatable
         return $this->hasMany(QuestionAnswer::class);
     }
 
+    public function getProfilePicture()
+    {
+        return $this->profile_picture ? $this->profile_picture : asset('images/profilePicture.png');
+    }
+
     public function doneTest($course)
     {
         $rawAnswers = $this->answers;

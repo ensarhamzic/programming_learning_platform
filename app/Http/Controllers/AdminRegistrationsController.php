@@ -91,7 +91,11 @@ class AdminRegistrationsController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $stringId = (string)$id;
+        while (strlen($stringId) < 13) {
+            $stringId = '0' . $stringId;
+        }
+        $user = User::find($stringId);
         $user->delete();
         Session::flash('rejected', 'User rejected and deleted from database');
         return redirect()->route('admin.registrations.index');

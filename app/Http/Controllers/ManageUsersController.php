@@ -93,7 +93,11 @@ class ManageUsersController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $stringId = (string)$id;
+        while (strlen($stringId) < 13) {
+            $stringId = '0' . $stringId;
+        }
+        $user = User::find($stringId);
         $user->delete();
         Session::flash('success', 'User deleted successfully');
         return redirect()->route('admin.users.index');

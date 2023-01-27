@@ -541,8 +541,13 @@ class CoursesController extends Controller
         if ($course->active == 0) {
             return redirect()->back()->with('error', 'You can not enroll in this course. Course is not active at the moment');
         }
+
+        $stringId = (string)auth()->user()->JMBG;
+        while (strlen($stringId) < 13) {
+            $stringId = '0' . $stringId;
+        }
         CourseAttend::create([
-            'user_JMBG' => auth()->user()->JMBG,
+            'user_JMBG' => $stringId,
             'course_id' => $course->id,
         ]);
 
@@ -555,7 +560,11 @@ class CoursesController extends Controller
             return redirect()->route('login');
         }
         $course = Course::findOrFail($courseId);
-        $courseAttend = CourseAttend::where('user_JMBG', auth()->user()->JMBG)->where('course_id', $course->id)->first();
+        $stringId = (string)auth()->user()->JMBG;
+        while (strlen($stringId) < 13) {
+            $stringId = '0' . $stringId;
+        }
+        $courseAttend = CourseAttend::where('user_JMBG', $stringId)->where('course_id', $course->id)->first();
         if ($courseAttend) {
             $courseAttend->delete();
         }

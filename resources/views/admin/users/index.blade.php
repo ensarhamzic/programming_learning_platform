@@ -35,8 +35,7 @@
   @foreach ($users as $user)
   <div class="oneUser">
     <div class="userImage">
-      <img src="{{ $user->profile_picture != "" ? $user->profile_picture : asset('images/profilePicture.png') }}"
-        alt="user image" class="userImage">
+      <img src="{{ $user->getProfilePicture() }}" alt="user image" class="userImage">
     </div>
     <h2 class='admin_h2'>{{ $user->name }} {{ $user->surname }}</h2>
     <p class='admin_p'>JMBG: {{ $user->JMBG }}</p>

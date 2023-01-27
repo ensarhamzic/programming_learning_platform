@@ -1,6 +1,5 @@
 <svg height="50px" width="50px" version="1.1" xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-3.84 -3.84 55.62 55.62" xml:space="preserve" fill="#000000"
-    stroke="#000000" stroke-width="0.9587999999999999">
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-3.84 -3.84 55.62 55.62" xml:space="preserve" fill="#000000">
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"
         stroke-width="0.57528"></g>

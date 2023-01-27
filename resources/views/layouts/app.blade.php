@@ -53,6 +53,18 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
+                        <li class="nav-item">
+                            <form action="{{ route('courses.search') }}" method="GET">
+                                @csrf
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <x-search-icon />
+                                    </span>
+                                    <input type="text" name="query" class="form-control" placeholder="Course"
+                                        aria-label="course">
+                                </div>
+                            </form>
+                        </li>
                         @guest
                         @if (Route::has('login'))
                         <li class="nav-item">
@@ -88,19 +100,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('teacher.courses.create') }}">Create course</a>
                         </li>
-                        @elseif (Auth::user()->isStudent())
-                        <li class="nav-item">
-                            <form action="{{ route('courses.search') }}" method="GET">
-                                @csrf
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <x-search-icon />
-                                    </span>
-                                    <input type="text" name="query" class="form-control" placeholder="Course"
-                                        aria-label="course">
-                                </div>
-                            </form>
-                        </li>
+
                         @endif
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

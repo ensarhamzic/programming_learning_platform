@@ -1,0 +1,85 @@
+.profilePicture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    margin: 10px auto;
+}
+
+.profilePicture img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.profileCard {
+    /* background-color: transparent !important; */
+    border: none !important;
+    width: 500px !important;
+    margin: 20px auto;
+}
+
+.profileInfo {
+    text-align: center;
+}
+
+.profileInfo small {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.courses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.courseContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+.courses img {
+    width: 300px;
+}
+
+.coursesInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.coursesInfo a,
+.coursesInfo a:link,
+.coursesInfo a:visited {
+    color: #ccc;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.coursesInfo a:hover {
+    color: #feba55;
+}
+
+.foundCourses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.foundCourseContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}

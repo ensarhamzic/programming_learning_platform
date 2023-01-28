@@ -75,7 +75,7 @@ class CoursesController extends Controller
         $course->active = 1;
         $course->save();
 
-        return redirect()->route('teacher.courses.index');
+        return redirect()->route('courses.show', $course->id);
     }
 
     /**

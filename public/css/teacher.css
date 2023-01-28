@@ -10,29 +10,6 @@
     background: rgba(0, 0, 0, 0.8);
 }
 
-.cropModal {
-    background-color: rgb(106, 106, 106) !important;
-    position: fixed !important;
-    top: 50%;
-    left: 50%;
-    width: 800px !important;
-    height: 500px !important;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    border: 3px solid rgb(38, 38, 38) !important;
-}
-
-.cropDiv {
-    width: 100% !important;
-    padding: 0 !important;
-    overflow: auto !important;
-}
-
-.image {
-    display: block;
-    max-width: 100%;
-}
-
 .activeCourses,
 .inactiveCourses {
     margin: 0 0 50px 0;
@@ -152,4 +129,37 @@
 
 .backButton:hover {
     color: #f7a429 !important;
+}
+
+@media screen and (max-width: 800px) {
+    .attendantsTable th {
+        font-size: 1.2rem;
+    }
+
+    .attendantsTable td {
+        font-size: 1rem;
+    }
+}
+@media screen and (max-width: 550px) {
+    .attendantsTable th {
+        font-size: 1rem;
+    }
+
+    .attendantsTable td {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .course {
+        width: 95%;
+    }
+
+    .courseBanner {
+        width: 100% !important;
+    }
+
+    .courseOptions {
+        flex-wrap: wrap;
+    }
 }

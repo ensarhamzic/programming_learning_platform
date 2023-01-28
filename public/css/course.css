@@ -39,6 +39,7 @@
 
 .teacherActions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
     align-items: center;
@@ -258,4 +259,66 @@ input[type="checkbox"] {
 
 .testCancel {
     border: 1px solid #ccc !important;
+}
+
+@media screen and (max-width: 1000px) {
+    .checkQuestion {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .totalPoints {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 900px) {
+    .course {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .bannerDiv {
+        width: 100%;
+    }
+
+    .courseTitle h1 {
+        font-size: 1.8rem !important;
+    }
+
+    .courseOwner p {
+        font-size: 1rem !important;
+    }
+
+    .usersRating h3 {
+        font-size: 1.2rem;
+    }
+
+    .ratingDiv span {
+        font-size: 1.2rem;
+    }
+
+    .ratingsCount {
+        font-size: 1rem !important;
+    }
+
+    .ratingStar {
+        width: 30px;
+    }
+
+    .description {
+        font-size: 1.2rem;
+    }
+
+    .mainContent h1 {
+        font-size: 1.8rem !important;
+    }
+
+    .section h3 {
+        font-size: 1.5rem !important;
+    }
+
+    .oneContent {
+        font-size: 1.2rem;
+    }
 }

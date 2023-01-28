@@ -45,6 +45,7 @@
 
 .flexForm {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     align-items: center;
@@ -112,4 +113,20 @@
 .notificationActions button,
 .notificationActions a {
     width: 150px;
+}
+
+@media screen and (max-width: 500px) {
+    .flexForm input {
+        width: 80%;
+    }
+
+    .oneUser {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .notificationForm {
+        width: 90%;
+    }
 }

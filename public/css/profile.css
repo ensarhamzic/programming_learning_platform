@@ -83,3 +83,23 @@
     justify-content: space-between;
     gap: 20px;
 }
+
+@media screen and (max-width: 600px) {
+    .profileCard {
+        width: 100% !important;
+    }
+
+    .coursesInfo h1 {
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .profileCard {
+        width: 100% !important;
+    }
+
+    .courses img {
+        width: 250px;
+    }
+}

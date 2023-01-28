@@ -59,3 +59,52 @@ body {
     background-color: #f7a429 !important;
     color: white !important;
 }
+
+.navbar-toggler {
+    background-color: white !important;
+}
+
+.cropModal {
+    background-color: rgb(106, 106, 106) !important;
+    position: fixed !important;
+    top: 50%;
+    left: 50%;
+    width: 800px !important;
+    height: 500px !important;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    border: 3px solid rgb(38, 38, 38) !important;
+}
+
+.cropDiv {
+    width: 100% !important;
+    padding: 0 !important;
+    overflow: auto !important;
+}
+
+.image {
+    display: block;
+    max-width: 100%;
+}
+
+.btn-close {
+    color: white !important;
+}
+
+@media screen and (max-width: 850px) {
+    .cropModal {
+        width: 90% !important;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .navbar-brand {
+        height: 70px !important;
+        margin-bottom: 20px;
+    }
+
+    .navbar-brand img {
+        height: 70px !important;
+    }
+}

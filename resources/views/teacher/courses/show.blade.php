@@ -87,7 +87,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="rateModalLabel">Rate this course</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
         <h3>Rate this course from 1 to 5 stars</h3>
@@ -278,16 +278,19 @@
     </div>
     @endforeach
     @if (Auth::user()->attendsCourse($course))
-    @if (Auth::user()->doneTest($course))
-    <a href="{{ route('courses.test.results', $course->id) }}" class="btn btn-secondary customBtn">See test results</a>
-    @else
-    <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary customBtn">Take course test</a>
-    @endif
-    <button type="button" class="btn btn-info customBtn" data-bs-toggle="modal" data-bs-target="#rateModal"
-      onclick="rateClickHandler({{ $course->id }})">Rate this course</button>
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-      onclick="unenrollClickHandler({{ $course->id }})">Leave this course</button>
-    @endif
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      @if (Auth::user()->doneTest($course))
+      <a href="{{ route('courses.test.results', $course->id) }}" class="btn btn-secondary customBtn">See test
+        results</a>
+      @else
+      <a href="{{ route('courses.test', $course->id) }}" class="btn btn-secondary customBtn">Take course test</a>
+      @endif
+      <button type="button" class="btn btn-info customBtn" data-bs-toggle="modal" data-bs-target="#rateModal"
+        onclick="rateClickHandler({{ $course->id }})">Rate this course</button>
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+        onclick="unenrollClickHandler({{ $course->id }})">Leave this course</button>
+      @endif
+    </div>
   </div>
   @elseif (auth()->guest() || (Auth::user()->isStudent()))
   <div class="alert alert-danger text-center notEnrolled">

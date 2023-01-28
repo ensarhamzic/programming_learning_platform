@@ -20,7 +20,6 @@
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email</th>
                 <th>Test type</th>
                 <th>Test points</th>
               </tr>
@@ -33,7 +32,6 @@
                     {{ $attendant->user->name }} {{ $attendant->user->surname }}
                   </a>
                 </td>
-                <td>{{ $attendant->user->email }}</td>
 
                 @if (!$attendant->user->doneTest($course))
                 <td>/</td>

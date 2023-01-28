@@ -10,8 +10,10 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header ">
           <h3>Course attendants</h3>
+          <a type="button" class="backButton" href="{{ route('courses.show', $course->id) }}">
+            &lt;&lt; Go Back </a>
         </div>
         <div class="card-body">
           <table class="table attendantsTable">

@@ -4,10 +4,30 @@
 <link rel="stylesheet" href="{{ asset('css/course.css') }}" />
 
 <script>
-  const deleteClickHandler = (courseId) => {
+  const unenrollClickHandler = (courseId) => {
     var url = '{{ route("courses.unenroll", ":courseId") }}';
     url = url.replace(':courseId', courseId);
     document.getElementById("deleteForm").setAttribute("action", url);
+  }
+
+  const deleteCourseHandler = (courseId) => {
+    var url = '{{ route("admin.courses.delete", ":courseId") }}';
+    url = url.replace(':courseId', courseId);
+    document.getElementById("courseDeleteForm").setAttribute("action", url);
+  }
+
+  const deleteSectionHandler = (courseId, sectionId) => {
+    var url = '{{ route("admin.courses.deleteSection", [":courseId", ":sectionId"]) }}';
+    url = url.replace(':courseId', courseId);
+    url = url.replace(':sectionId', sectionId);
+    document.getElementById("sectionDeleteForm").setAttribute("action", url);
+  }
+
+  const deleteContentHandler = (courseId, contentId) => {
+    var url = '{{ route("admin.courses.deleteContent", [":courseId", ":contentId"]) }}';
+    url = url.replace(':courseId', courseId);
+    url = url.replace(':contentId', contentId);
+    document.getElementById("contentDeleteForm").setAttribute("action", url);
   }
 
   const rateClickHandler = (courseId) => {
@@ -56,6 +76,12 @@
 @section('content')
 <x-delete-modal title="Leave course" content="Are you sure you want to leave this course?"
   buttonContent="Leave course" />
+<x-delete-modal modalId="sectionDeleteModal" formId="sectionDeleteForm" title="Delete Section"
+  content="Are you sure you want to delete this section?" buttonContent="Delete Section" />
+<x-delete-modal modalId="contentDeleteModal" formId="contentDeleteForm" title="Delete Content"
+  content="Are you sure you want to delete this content?" buttonContent="Delete Content" />
+<x-delete-modal modalId="courseDeleteModal" formId="courseDeleteForm" title="Delete Course"
+  content="Are you sure you want to delete this course?" buttonContent="Delete Course" />
 <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -167,13 +193,21 @@
       <span class="ratingsCount">({{ $course->ratings->count() }})</span>
     </div>
   </div>
+
+  @if (Auth::user()->isAdmin())
+  <div class="deleteCourseAdminButton">
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#courseDeleteModal"
+      onclick="deleteCourseHandler({{ $course->id }})">Delete Course</button>
+  </div>
+  @endif
   <div class="description">
     <p>
       {{ $course->description }}
     </p>
   </div>
   <hr />
-  @if(auth()->check() && (Auth::user()->ownsCourse($course) || Auth::user()->attendsCourse($course)))
+  @if(auth()->check() && (Auth::user()->ownsCourse($course) || Auth::user()->attendsCourse($course) ||
+  Auth::user()->isAdmin()))
   <div class="mainContent">
     <div>
       <h1>Course content</h1>
@@ -184,6 +218,10 @@
         <h3>{{ $section->title }}</h3>
         @if (Auth::user()->ownsCourse($course) && !$course->completed)
         <a href="{{ route('teacher.courses.updateSection', [$course->id, $section->id]) }}">Edit</a>
+        @endif
+        @if (Auth::user()->isAdmin())
+        <button class="deleteButton" data-bs-toggle="modal" data-bs-target="#sectionDeleteModal"
+          onclick="deleteSectionHandler({{ $course->id }}, {{ $section->id }})">Delete</button>
         @endif
       </div>
       @if ($section->contents->count() > 0)
@@ -226,6 +264,10 @@
         <a href="{{ route('teacher.courses.editContent', [$course->id, $content->id]) }}"
           class="contentActionLink">Edit</a>
         @endif
+        @if (Auth::user()->isAdmin())
+        <button class="deleteButton" data-bs-toggle="modal" data-bs-target="#contentDeleteModal"
+          onclick="deleteContentHandler({{ $course->id }}, {{ $content->id }})">Delete</button>
+        @endif
       </div>
       @endforeach
       @else
@@ -244,7 +286,7 @@
     <button type="button" class="btn btn-info customBtn" data-bs-toggle="modal" data-bs-target="#rateModal"
       onclick="rateClickHandler({{ $course->id }})">Rate this course</button>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
-      onclick="deleteClickHandler({{ $course->id }})">Leave this course</button>
+      onclick="unenrollClickHandler({{ $course->id }})">Leave this course</button>
     @endif
   </div>
   @elseif (auth()->guest() || (Auth::user()->isStudent()))

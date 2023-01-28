@@ -38,6 +38,10 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('admin/notifications/create', [NotificationsController::class, 'create'])->name('admin.notifications.create');
     Route::post('admin/notifications/', [NotificationsController::class, 'store'])->name('admin.notifications.store');
     Route::delete('admin/notifications/{id}', [NotificationsController::class, 'destroy'])->name('admin.notifications.destroy');
+
+    Route::delete('admin/courses/{courseId}/section/{sectionId}', [CoursesController::class, 'deleteSection'])->name('admin.courses.deleteSection');
+    Route::delete('admin/courses/{courseId}/content/{contentId}', [CoursesController::class, 'deleteContent'])->name('admin.courses.deleteContent');
+    Route::delete('admin/courses/{courseId}', [CoursesController::class, 'destroy'])->name('admin.courses.delete');
 });
 
 Route::middleware(['role:teacher'])->group(function () {
@@ -68,7 +72,7 @@ Route::middleware(['role:teacher'])->group(function () {
     Route::delete('teacher/courses/{id}/deleteContent/{contentId}', [CoursesController::class, 'deleteContent'])->name('teacher.courses.deleteContent');
 });
 
-Route::get('courses/search', [CoursesController::class, 'search'])->name('courses.search');
+Route::get('search', [IndexController::class, 'search'])->name('search');
 Route::post('courses/{id}/rate', [CoursesController::class, 'rate'])->name('courses.rate');
 Route::get('courses/{id}', [CoursesController::class, 'show'])->name('courses.show');
 Route::get('courses/{id}/content/{contentId}/question', [CoursesController::class, 'showCheckQuestion'])->name('courses.checkQuestion');

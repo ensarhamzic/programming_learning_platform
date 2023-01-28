@@ -6,6 +6,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 
 use App\Models\Notification;
+use App\Models\User;
 
 class IndexController extends Controller
 {
@@ -18,5 +19,18 @@ class IndexController extends Controller
             return $course->ratings->avg('rating');
         })->take(5);
         return view('welcome', compact('notifications', 'courses', 'bestRatedCourses'));
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->get('query');
+        $courses = Course::where('title', 'like', '%' . $search . '%')->get();
+        $students = User::where('name', 'like', '%' . $search . '%')->whereHas('role', function ($query) {
+            $query->where('name', 'student');
+        })->get();
+        $teachers = User::where('name', 'like', '%' . $search . '%')->where('approved', 1)->whereHas('role', function ($query) {
+            $query->where('name', 'teacher');
+        })->get();
+        return view('search', compact('courses', 'search', 'students', 'teachers'));
     }
 }

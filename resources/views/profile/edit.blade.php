@@ -220,10 +220,11 @@
             </div>
 
             <div class="row mb-0">
-              <div class="col-md-6 offset-md-4">
+              <div class="profileActions">
                 <button type="submit" class="btn btn-primary customBtn">
                   Update profile
                 </button>
+                <a type="button" class="btn btn-secondary" href="{{ route('profile.index') }}">Cancel</a>
               </div>
             </div>
           </form>

@@ -71,8 +71,9 @@
     </div>
   </div>
   @endforeach
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center gap-2">
     <button class="btn btn-primary customBtn" type="submit">End Test</button>
+    <a type="button" class="btn btn-secondary testCancel" href="{{ route('courses.show', $course->id) }}">Cancel</a>
   </div>
 </form>
 @endsection

@@ -135,3 +135,21 @@
 .attendantsTable a:hover {
     color: rgb(255, 255, 255, 0.7);
 }
+
+.createActions {
+    display: flex;
+    justify-content: center;
+    gap: 20px !important;
+}
+
+.backButton,
+.backButton:link,
+.backButton:visited {
+    color: #feba55 !important;
+    transition: 0.2s;
+    font-size: 1rem;
+}
+
+.backButton:hover {
+    color: #f7a429 !important;
+}

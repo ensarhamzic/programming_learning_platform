@@ -17,9 +17,14 @@
 
 .oneUser,
 .oneNotification {
-    border: 1px solid rgb(61, 61, 61);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
     padding: 10px;
-    max-width: 300px;
+    width: 320px;
+}
+
+.admin_h2 {
+    text-align: center;
 }
 
 .usersList,
@@ -69,7 +74,6 @@
 .userImage img {
     width: 100%;
     border-radius: 50%;
-    border: 3px solid rgb(106, 106, 106);
 }
 
 .oneNotification {

@@ -85,10 +85,13 @@
             </div>
             <input type="hidden" name="imageURI" value="" id="imageURI" />
 
-            <div class="d-flex justify-content-center align-items-center">
+            <div class="d-flex justify-content-center align-items-center gap-2">
               <button type="submit" class="btn btn-primary customBtn">
                 Update Course
               </button>
+              <a type="button" class="btn btn-secondary" href="{{ route('courses.show', $course->id) }}">
+                Cancel
+              </a>
             </div>
           </form>
         </div>

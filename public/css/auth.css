@@ -32,3 +32,9 @@
     display: block;
     max-width: 100%;
 }
+
+.profileActions {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 20px !important;
+}

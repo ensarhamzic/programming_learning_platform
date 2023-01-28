@@ -84,10 +84,11 @@
             </div>
             <input type="hidden" name="imageURI" value="" id="imageURI" />
 
-            <div class="d-flex justify-content-center align-items-center">
+            <div class="createActions">
               <button type="submit" class="btn btn-primary customBtn">
                 Create Course
               </button>
+              <button type="button" class="btn btn-secondary" onclick="javascript:history.back()">Cancel</button>
             </div>
           </form>
         </div>

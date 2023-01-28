@@ -32,7 +32,7 @@
 
 <body>
     <div id=" app">
-        <nav class="navbar navbar-expand-md navbar-light shadow-sm navigationBar">
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm navigationBar">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('images/logo4.png') }}" alt="logo" height="100"
@@ -54,14 +54,13 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         <li class="nav-item">
-                            <form action="{{ route('courses.search') }}" method="GET">
-                                @csrf
+                            <form action="{{ route('search') }}" method="GET">
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" id="basic-addon1">
                                         <x-search-icon />
                                     </span>
-                                    <input type="text" name="query" class="form-control" placeholder="Course"
-                                        aria-label="course">
+                                    <input type="text" name="query" class="form-control"
+                                        placeholder="Search for courses, users" aria-label="course">
                                 </div>
                             </form>
                         </li>

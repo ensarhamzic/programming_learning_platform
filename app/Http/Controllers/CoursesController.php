@@ -166,7 +166,11 @@ class CoursesController extends Controller
     public function destroy($id)
     {
         $course = Course::find($id);
+        if (!Auth::check() || (!Auth::user()->ownsCourse($course) && !Auth::user()->isAdmin()))
+            return redirect()->back();
         $course->delete();
+        if (Auth::user()->isAdmin())
+            return redirect()->route('index');
         return redirect()->route('teacher.courses.index');
     }
 
@@ -234,7 +238,7 @@ class CoursesController extends Controller
         $course = Course::findOrFail($courseId);
         $section = $course->sections()->findOrFail($sectionId);
 
-        if (!Auth::check() ||  !Auth::user()->ownsCourse($course))
+        if (!Auth::check() || (!Auth::user()->ownsCourse($course) && !Auth::user()->isAdmin()))
             return redirect()->back();
 
         $section->delete();
@@ -523,7 +527,7 @@ class CoursesController extends Controller
             $query->whereIn('id', $sections->pluck('id'));
         })->where('id', $contentId)->first();
 
-        if (!Auth::check() || !Auth::user()->ownsCourse($course) || !$content) {
+        if (!Auth::check() || !$content || (!Auth::user()->ownsCourse($course) && !Auth::user()->isAdmin())) {
             return redirect()->back();
         }
 
@@ -849,13 +853,6 @@ class CoursesController extends Controller
 
         $attendants = $course->attends()->get();
         return view('teacher.courses.attendants', compact('course', 'attendants'));
-    }
-
-    public function search(Request $request)
-    {
-        $search = $request->get('query');
-        $courses = Course::where('title', 'like', '%' . $search . '%')->get();
-        return view('courses.search', compact('courses', 'search'));
     }
 
     public function rate(Request $request, $courseId)

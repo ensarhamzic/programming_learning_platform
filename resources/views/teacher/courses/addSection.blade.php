@@ -31,10 +31,13 @@
               </div>
             </div>
 
-            <div class="d-flex justify-content-center align-items-center">
+            <div class="d-flex justify-content-center align-items-center gap-2">
               <button type="submit" class="btn btn-primary customBtn">
                 Add Section
               </button>
+              <a type="button" class="btn btn-secondary" href="{{ route('courses.show', $courseId) }}">
+                Cancel
+              </a>
             </div>
           </form>
         </div>

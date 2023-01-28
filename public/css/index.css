@@ -102,3 +102,34 @@
 .readMore {
     float: right;
 }
+
+.foundCourses,
+.foundUsers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.foundCourseContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.foundUsers img {
+    width: 150px;
+    margin: 10px auto;
+}
+
+.foundUserContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    gap: 20px;
+}
+
+.foundUserContent button {
+    width: 100% !important;
+}

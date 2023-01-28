@@ -16,7 +16,7 @@
         <small>{{ $user->role->name }}</small>
         <h1>{{ $user->name }} {{ $user->surname }}</h1>
         <p><span>@</span>{{ $user->username }}</p>
-        @if (Auth::user()->JMBG == $user->JMBG)
+        @if (Auth::check() && Auth::user()->JMBG == $user->JMBG)
         <a href="{{ route('profile.edit') }}" class="btn btn-primary customBtn">Edit profile</a>
         @endif
       </div>

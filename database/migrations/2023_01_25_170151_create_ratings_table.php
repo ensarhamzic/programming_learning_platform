@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('rating');
             $table->timestamps();
 
-            $table->foreign('course_id')->references('id')->on('courses');
-            $table->foreign('user_JMBG')->references('JMBG')->on('users');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('user_JMBG')->references('JMBG')->on('users')->onDelete('cascade');
         });
     }
 

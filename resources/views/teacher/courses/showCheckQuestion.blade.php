@@ -20,7 +20,10 @@
         <label for="answer{{ $answer->id }}">{{ $answer->text }}</label>
       </div>
       @endforeach
-      <button type="submit" class="btn btn-primary customBtn">Submit and mark content as completed</button>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary customBtn">Mark as completed</button>
+        <a type="button" class="btn btn-secondary" href="{{ route('courses.show', $course->id) }}">Cancel</a>
+      </div>
     </form>
   </div>
 </div>

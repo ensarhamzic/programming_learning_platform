@@ -134,7 +134,7 @@
               <label for="description" class="col-md-4 col-form-label text-md-end">Profile picture</label>
 
               <div class="col-md-6">
-                <input id="profilePicture" type="file"
+                <input id="profilePicture" type="file" onchange="pictureChange()"
                   class="form-control @error('profilePicture') is-invalid @enderror" name="profilePicture" required
                   rows="10" autocomplete="current-profilePicture" accept="image/png, image/jpeg, image/jpg" />
 
@@ -388,14 +388,18 @@
     }
 
 
-    let profilePicture = document.getElementById('profilePicture');
+    const pictureChange = function () {
+        let profilePicture = document.getElementById('profilePicture');
   let newProfilePicture = profilePicture.cloneNode(true);
   profilePicture.parentNode.replaceChild(newProfilePicture, profilePicture);
-  newProfilePicture.addEventListener('change', function () {
-    if (this.files && this.files[0] && this.files[0].type.match(/^image\//)) {
+    if (newProfilePicture.files && newProfilePicture.files[0] && newProfilePicture.files[0].type.match(/^image\//)) {
+        console.log(newProfilePicture.files[0])
+        let cropModal = document.getElementById('cropModal');
+        let newCropModal = cropModal.cloneNode(true);
+        cropModal.parentNode.replaceChild(newCropModal, cropModal);
       document.getElementById('cropModal').style.display = 'block';
       let image =  document.getElementById('image')
-      image.src = URL.createObjectURL(this.files[0])
+      image.src = URL.createObjectURL(newProfilePicture.files[0])
       const cropper = new Cropper(image, { aspectRatio: 1 / 1});
       let cropBtn = document.getElementById('cropBtn');
       let newCropBtn = cropBtn.cloneNode(true);
@@ -406,7 +410,7 @@
         document.getElementById('cropModal').style.display = 'none';
       });
     }
-  });
+    }
 
     
 </script>

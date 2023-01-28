@@ -69,9 +69,9 @@
               <label for="description" class="col-md-4 col-form-label text-md-end">Course Banner</label>
 
               <div class="col-md-6">
-                <input id="courseImage" type="file" class="form-control @error('courseImage') is-invalid @enderror"
-                  name="courseImage" required rows="10" autocomplete="current-courseImage"
-                  accept="image/png, image/jpeg, image/jpg" />
+                <input id="courseImage" type="file" onchange="pictureChange()"
+                  class="form-control @error('courseImage') is-invalid @enderror" name="courseImage" required rows="10"
+                  autocomplete="current-courseImage" accept="image/png, image/jpeg, image/jpg" />
 
                 @error('imageURI')
                 <span class="invalid-feedback" role="alert" id="imageServerError">
@@ -144,15 +144,19 @@
 
 
 
-  let courseImage = document.getElementById('courseImage');
-  let newCourseImage = courseImage.cloneNode(true);
-  courseImage.parentNode.replaceChild(newCourseImage, courseImage);
-  newCourseImage.addEventListener('change', function () {
-    if (this.files && this.files[0] && this.files[0].type.match(/^image\//)) {
+    const pictureChange = function () {
+        let profilePicture = document.getElementById('courseImage');
+  let newProfilePicture = profilePicture.cloneNode(true);
+  profilePicture.parentNode.replaceChild(newProfilePicture, profilePicture);
+    if (newProfilePicture.files && newProfilePicture.files[0] && newProfilePicture.files[0].type.match(/^image\//)) {
+        console.log(newProfilePicture.files[0])
+        let cropModal = document.getElementById('cropModal');
+        let newCropModal = cropModal.cloneNode(true);
+        cropModal.parentNode.replaceChild(newCropModal, cropModal);
       document.getElementById('cropModal').style.display = 'block';
       let image =  document.getElementById('image')
-      image.src = URL.createObjectURL(this.files[0])
-      const cropper = new Cropper(image, { aspectRatio: 16 / 9});
+      image.src = URL.createObjectURL(newProfilePicture.files[0])
+      const cropper = new Cropper(image, { aspectRatio: 1 / 1});
       let cropBtn = document.getElementById('cropBtn');
       let newCropBtn = cropBtn.cloneNode(true);
       cropBtn.parentNode.replaceChild(newCropBtn, cropBtn);
@@ -162,7 +166,7 @@
         document.getElementById('cropModal').style.display = 'none';
       });
     }
-  });
+    }
 
   window.onload = function () {
     document.getElementById("imageServerError").style.display = "block";

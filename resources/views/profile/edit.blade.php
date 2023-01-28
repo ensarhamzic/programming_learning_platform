@@ -130,6 +130,16 @@
               </div>
             </div>
 
+
+            <div class="row mb-3">
+              <label for="description" class="col-md-4 col-form-label text-md-end"></label>
+
+              <div class="col-md-6">
+                <input id="deletePicture" onchange="deleteChange()" type="checkbox" onchange="pictureChange()"
+                  @error('profilePicture') is-invalid @enderror" name="deletePicture" required />
+                <label for="deletePicture">Delete profile picture</label>
+              </div>
+            </div>
             <div class="row mb-3">
               <label for="description" class="col-md-4 col-form-label text-md-end">Profile picture</label>
 
@@ -137,6 +147,7 @@
                 <input id="profilePicture" type="file" onchange="pictureChange()"
                   class="form-control @error('profilePicture') is-invalid @enderror" name="profilePicture" required
                   rows="10" autocomplete="current-profilePicture" accept="image/png, image/jpeg, image/jpg" />
+
 
                 @error('imageURI')
                 <span class="invalid-feedback" role="alert" id="imageServerError">
@@ -412,6 +423,14 @@
     }
     }
 
+    const deleteChange = () => {
+      let deleteProfilePicture = document.getElementById('deletePicture');
+      if(deleteProfilePicture.checked) {
+        document.getElementById('profilePicture').disabled = true;
+      } else {
+        document.getElementById('profilePicture').disabled = false;
+      }
+    }
     
 </script>
 

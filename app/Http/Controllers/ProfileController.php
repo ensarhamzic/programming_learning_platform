@@ -148,9 +148,16 @@ class ProfileController extends Controller
         }
 
         $image_uploaded = null;
-        if ($request->imageURI) {
+        if ($request->imageURI && !$request->deletePicture) {
+            // dd("A");
             $image_uploaded = Cloudinary::upload($request->imageURI)->getSecurePath();
         }
+
+        if ($request->deletePicture) {
+            // dd("B");
+            $image_uploaded = "";
+        }
+
 
         $username = strtolower($request->name . $request->surname);
         $similarUsernames = User::where('username', 'like', $username . '%')->where('username', "!=", Auth::user()->username)->get();
@@ -168,7 +175,10 @@ class ProfileController extends Controller
         $user->birth_place = $request->birth_place;
         $user->birth_country = $request->birth_country;
         $user->birth_date = $request->birth_date;
-        $user->profile_picture = $image_uploaded ? $image_uploaded : $user->profile_picture;
+        if ($image_uploaded == "") {
+            $user->profile_picture = $image_uploaded;
+        } else
+            $user->profile_picture = $image_uploaded ? $image_uploaded : $user->profile_picture;
         $user->save();
 
         return redirect()->route('profile.index');

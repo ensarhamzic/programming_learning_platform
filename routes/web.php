@@ -70,6 +70,8 @@ Route::middleware(['role:teacher'])->group(function () {
     Route::get('teacher/courses/{id}/editContent/{contentId}', [CoursesController::class, 'editContent'])->name('teacher.courses.editContent');
     Route::put('teacher/courses/{id}/editContent/{contentId}', [CoursesController::class, 'updateContent'])->name('teacher.courses.updateContent');
     Route::delete('teacher/courses/{id}/deleteContent/{contentId}', [CoursesController::class, 'deleteContent'])->name('teacher.courses.deleteContent');
+
+    Route::get('teacher/courses/{id}/testStatistics', [CoursesController::class, 'testStatistics'])->name('teacher.courses.testStatistics');
 });
 
 Route::get('search', [IndexController::class, 'search'])->name('search');

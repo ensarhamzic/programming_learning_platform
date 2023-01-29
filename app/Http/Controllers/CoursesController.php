@@ -894,6 +894,80 @@ class CoursesController extends Controller
         return view('teacher.courses.attendants', compact('course', 'attendants', 'averagePoints'));
     }
 
+    public function testStatistics(Request $request, $courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        if (!Auth::check() || !Auth::user()->ownsCourse($course)) {
+            return redirect()->back();
+        }
+
+        $attendants = $course->attends()->get();
+        $averagePoints = 0;
+        $usersDoneTest = 0;
+
+        foreach ($attendants as $attendant) {
+            $questions = collect($course->questions())->where('type', 'test')->where('level', $request->input('level'));
+            $questionsIds = $questions->pluck('id');
+
+            $rawAnswers = $attendant->user->answers;
+            $allAnswers = [];
+            foreach ($rawAnswers as $answer) {
+                if ($answer->answer->question->type == "test")
+                    array_push($allAnswers, $answer->answer);
+            }
+            $allAnswers = Arr::flatten($allAnswers);
+            $allAnswers = collect($allAnswers);
+            $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+            if ($userAnswers->count() == 0)
+                continue;
+
+            $usersDoneTest++;
+            $level = $userAnswers->first()->question->level;
+
+            $questions = $questions->where('level', $level);
+
+            $points = 0;
+            foreach ($questions as $question) {
+                if (in_array($question->getCorrectAnswer()->id, $userAnswers->pluck('id')->toArray()))
+                    if ($question->getCorrectAnswer()->userUsedHelp($attendant->user->JMBG))
+                        $points += 0.5;
+                    else
+                        $points += 1;
+            }
+            $averagePoints += $points;
+        }
+
+        if ($usersDoneTest > 0)
+            $averagePoints /= $usersDoneTest;
+
+
+        $questions = collect($course->questions())->where('type', 'test')->where('level', $request->input('level'));
+        foreach ($questions as $question) {
+            $usersWithCorrectAnswer = 0;
+            foreach ($attendants as $attendant) {
+                $rawAnswers = $attendant->user->answers;
+                $allAnswers = [];
+                foreach ($rawAnswers as $answer) {
+                    if ($answer->answer->question->type == "test")
+                        array_push($allAnswers, $answer->answer);
+                }
+                $allAnswers = Arr::flatten($allAnswers);
+                $allAnswers = collect($allAnswers);
+                $userAnswer = $allAnswers->where('question_id', $question->id)->first();
+                if ($userAnswer == null)
+                    continue;
+
+                if ($userAnswer->id == $question->getCorrectAnswer()->id)
+                    $usersWithCorrectAnswer++;
+            }
+            $question->usersWithCorrectAnswer = $usersWithCorrectAnswer;
+        }
+
+        $questions = $questions->sortBy('usersWithCorrectAnswer');
+
+        return view('teacher.courses.testStatistics', compact('course', 'questions', 'averagePoints', 'usersDoneTest'));
+    }
+
     public function rate(Request $request, $courseId)
     {
         $request->validate([

@@ -279,6 +279,11 @@ input[type="checkbox"] {
 @media screen and (max-width: 600px) {
     .totalPoints {
         width: 100%;
+        font-size: 1.2rem;
+    }
+
+    .totalPoints span {
+        font-size: 1.8rem;
     }
 }
 @media screen and (max-width: 900px) {

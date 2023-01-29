@@ -122,8 +122,11 @@
 .backButton,
 .backButton:link,
 .backButton:visited {
+    background-color: transparent !important;
+    border: none !important;
+    text-decoration: underline;
     color: #feba55 !important;
-    transition: 0.2s;
+    transition: color 0.2s;
     font-size: 1rem;
 }
 
@@ -181,5 +184,10 @@
 @media screen and (max-width: 600px) {
     .totalPoints {
         width: 100%;
+        font-size: 1.2rem;
+    }
+
+    .totalPoints span {
+        font-size: 1.8rem;
     }
 }

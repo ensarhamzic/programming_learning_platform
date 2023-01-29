@@ -36,7 +36,9 @@
                 <td>/</td>
                 <td>/</td>
                 @else
-                <td>{{ $attendant->user->testLevel($course) }}</td>
+                <td><a
+                    href="{{ route('teacher.courses.testStatistics', [$course->id, 'level=' . $attendant->user->testLevel($course)]) }}">
+                    {{ $attendant->user->testLevel($course) }}</a></td>
                 <td>
                   <a href="{{ route('teacher.courses.userTestResults', [$course->id, $attendant->user->JMBG]) }}">
                     {{ $attendant->user->testPoints($course) }}
@@ -51,7 +53,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="totalPoints">
     Average points: <span>{{ number_format( $averagePoints, 2, '.', '' ) }}</span> / {{

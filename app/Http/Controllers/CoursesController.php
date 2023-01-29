@@ -87,6 +87,7 @@ class CoursesController extends Controller
     public function show($id)
     {
         $course = Course::findOrFail($id);
+        if (!$course->active) abort(404);
         $userRating = null;
         if (Auth::check())
             $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();
@@ -852,7 +853,45 @@ class CoursesController extends Controller
         }
 
         $attendants = $course->attends()->get();
-        return view('teacher.courses.attendants', compact('course', 'attendants'));
+        $averagePoints = 0;
+        $usersDoneTest = 0;
+
+        foreach ($attendants as $attendant) {
+            $questions = collect($course->questions())->where('type', 'test');
+            $questionsIds = $questions->pluck('id');
+
+            $rawAnswers = $attendant->user->answers;
+            $allAnswers = [];
+            foreach ($rawAnswers as $answer) {
+                if ($answer->answer->question->type == "test")
+                    array_push($allAnswers, $answer->answer);
+            }
+            $allAnswers = Arr::flatten($allAnswers);
+            $allAnswers = collect($allAnswers);
+            $userAnswers = $allAnswers->whereIn('question_id', $questionsIds);
+            if ($userAnswers->count() == 0)
+                continue;
+
+            $usersDoneTest++;
+            $level = $userAnswers->first()->question->level;
+
+            $questions = $questions->where('level', $level);
+
+            $points = 0;
+            foreach ($questions as $question) {
+                if (in_array($question->getCorrectAnswer()->id, $userAnswers->pluck('id')->toArray()))
+                    if ($question->getCorrectAnswer()->userUsedHelp($attendant->user->JMBG))
+                        $points += 0.5;
+                    else
+                        $points += 1;
+            }
+            $averagePoints += $points;
+        }
+
+        if ($usersDoneTest > 0)
+            $averagePoints /= $usersDoneTest;
+
+        return view('teacher.courses.attendants', compact('course', 'attendants', 'averagePoints'));
     }
 
     public function rate(Request $request, $courseId)

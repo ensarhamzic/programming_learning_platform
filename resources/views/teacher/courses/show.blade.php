@@ -194,7 +194,7 @@
     </div>
   </div>
 
-  @if (Auth::user()->isAdmin())
+  @if (Auth::check() && Auth::user()->isAdmin())
   <div class="deleteCourseAdminButton">
     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#courseDeleteModal"
       onclick="deleteCourseHandler({{ $course->id }})">Delete Course</button>
@@ -212,17 +212,21 @@
     <div>
       <h1>Course content</h1>
     </div>
+    @if ($course->sections->count() > 0)
     @foreach ($course->sections as $section)
     <div class="section">
       <div class="sectionTitleDiv">
         <h3>{{ $section->title }}</h3>
-        @if (Auth::user()->ownsCourse($course) && !$course->completed)
-        <a href="{{ route('teacher.courses.updateSection', [$course->id, $section->id]) }}">Edit</a>
-        @endif
-        @if (Auth::user()->isAdmin())
-        <button class="deleteButton" data-bs-toggle="modal" data-bs-target="#sectionDeleteModal"
-          onclick="deleteSectionHandler({{ $course->id }}, {{ $section->id }})">Delete</button>
-        @endif
+        <div>
+          @if (Auth::user()->ownsCourse($course) && !$course->completed)
+          <a href="{{ route('teacher.courses.addContent', [$course->id, 'section=' . $section->id]) }}">Add Content</a>
+          <a href="{{ route('teacher.courses.updateSection', [$course->id, $section->id]) }}">Edit</a>
+          @endif
+          @if ( Auth::check() && Auth::user()->isAdmin())
+          <button class="deleteButton" data-bs-toggle="modal" data-bs-target="#sectionDeleteModal"
+            onclick="deleteSectionHandler({{ $course->id }}, {{ $section->id }})">Delete</button>
+          @endif
+        </div>
       </div>
       @if ($section->contents->count() > 0)
       @foreach ($section->contents as $content)
@@ -264,7 +268,7 @@
         <a href="{{ route('teacher.courses.editContent', [$course->id, $content->id]) }}"
           class="contentActionLink">Edit</a>
         @endif
-        @if (Auth::user()->isAdmin())
+        @if ( Auth::check() && Auth::user()->isAdmin())
         <button class="deleteButton" data-bs-toggle="modal" data-bs-target="#contentDeleteModal"
           onclick="deleteContentHandler({{ $course->id }}, {{ $content->id }})">Delete</button>
         @endif
@@ -277,6 +281,12 @@
       @endif
     </div>
     @endforeach
+
+    @else
+    <p class="text-center">
+      <i>No content in this course yet</i>
+    </p>
+    @endif
     @if (Auth::user()->attendsCourse($course))
     <div class="d-flex justify-content-center gap-3 flex-wrap">
       @if (Auth::user()->doneTest($course))

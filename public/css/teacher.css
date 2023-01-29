@@ -131,6 +131,21 @@
     color: #f7a429 !important;
 }
 
+.totalPoints {
+    margin: 20px auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    width: 500px;
+    padding: 20px 0;
+}
+
+.totalPoints span {
+    font-size: 2.5rem;
+}
+
 @media screen and (max-width: 800px) {
     .attendantsTable th {
         font-size: 1.2rem;
@@ -161,5 +176,10 @@
 
     .courseOptions {
         flex-wrap: wrap;
+    }
+}
+@media screen and (max-width: 600px) {
+    .totalPoints {
+        width: 100%;
     }
 }

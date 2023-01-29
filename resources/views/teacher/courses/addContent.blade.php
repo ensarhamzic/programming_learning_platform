@@ -36,7 +36,11 @@
               <div class="col-md-6">
                 <select name="section" id="section" class="form-control @error('section') is-invalid @enderror">
                   @foreach ($course->sections as $section)
+                  @if (app('request')->input('section') == $section->id)
+                  <option value="{{ $section->id }}" selected>{{ $section->title }}</option>
+                  @else
                   <option value="{{ $section->id }}">{{ $section->title }}</option>
+                  @endif
                   @endforeach
                 </select>
 

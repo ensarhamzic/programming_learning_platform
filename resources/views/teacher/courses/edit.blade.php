@@ -156,7 +156,7 @@
       document.getElementById('cropModal').style.display = 'block';
       let image =  document.getElementById('image')
       image.src = URL.createObjectURL(newProfilePicture.files[0])
-      const cropper = new Cropper(image, { aspectRatio: 1 / 1});
+      const cropper = new Cropper(image, { aspectRatio: 16 / 9});
       let cropBtn = document.getElementById('cropBtn');
       let newCropBtn = cropBtn.cloneNode(true);
       cropBtn.parentNode.replaceChild(newCropBtn, cropBtn);

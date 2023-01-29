@@ -211,7 +211,7 @@ class ProfileController extends Controller
             abort(404);
         }
 
-        $courses = $user->courses;
+        $courses = $user->courses->where('active', 1);
         $type = 'teaching';
         return view('profile.courses', compact('user', 'courses', 'type'));
     }

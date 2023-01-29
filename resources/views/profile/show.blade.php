@@ -27,13 +27,13 @@
   <div class="coursesList">
     <div class="coursesInfo">
       <h1>Teaching courses</h1>
-      @if ($user->courses->count() > 3)
+      @if ($user->courses->where('active', 1)->count() > 3)
       <a href="{{ route('profile.teachingCourses', $user->JMBG) }}">See all</a>
       @endif
     </div>
     <div class="courses">
       @if ($user->courses->count() > 0)
-      @foreach ($user->courses->take(3) as $course)
+      @foreach ($user->courses->where('active', 1)->take(3) as $course)
       <div class="card">
         <img src="{{ $course->image }}" class="card-img-top" alt="Course">
         <div class="card-body courseContent">
@@ -63,6 +63,7 @@
     <div class="courses">
       @if ($user->attends->count() > 0)
       @foreach ($user->attends->take(3) as $attend)
+      @if ($attend->course->active)
       <div class="card">
         <img src="{{ $attend->course->image }}" class="card-img-top" alt="Course">
         <div class="card-body courseContent">
@@ -74,6 +75,7 @@
           <a href="{{ route('courses.show', $attend->course->id) }}" class="btn btn-primary customBtn">Go to course</a>
         </div>
       </div>
+      @endif
       @endforeach
       @else
       <p class="noCourses">No courses</p>

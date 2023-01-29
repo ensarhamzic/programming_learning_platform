@@ -24,7 +24,7 @@ class IndexController extends Controller
     public function search(Request $request)
     {
         $search = $request->get('query');
-        $courses = Course::where('title', 'like', '%' . $search . '%')->get();
+        $courses = Course::where('title', 'like', '%' . $search . '%')->where('active', 1)->get();
         $students = User::where('name', 'like', '%' . $search . '%')->whereHas('role', function ($query) {
             $query->where('name', 'student');
         })->get();

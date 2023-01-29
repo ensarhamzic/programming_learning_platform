@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -51,6 +50,12 @@
         </div>
       </div>
     </div>
+  </div>
+
+
+  <div class="totalPoints">
+    Average points: <span>{{ number_format( $averagePoints, 2, '.', '' ) }}</span> / {{
+    count(collect($course->questions())->where('level', 'easy')) }}
   </div>
 
 </div>

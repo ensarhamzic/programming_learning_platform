@@ -99,7 +99,17 @@
 
 .sectionTitleDiv {
     display: flex;
-    align-items: baseline;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.sectionTitleDiv h3 {
+    margin: 0 !important;
+}
+
+.sectionTitleDiv div {
+    display: flex;
     gap: 20px;
 }
 

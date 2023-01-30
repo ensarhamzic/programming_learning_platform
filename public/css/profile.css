@@ -42,7 +42,7 @@
     justify-content: space-between;
     gap: 20px;
 }
-.courses img {
+.courses .card {
     width: 300px;
 }
 
@@ -99,7 +99,7 @@
         width: 100% !important;
     }
 
-    .courses img {
+    .courses .card {
         width: 250px;
     }
 }

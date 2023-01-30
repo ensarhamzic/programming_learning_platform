@@ -2,3 +2,9 @@
     width: 600px;
     margin: 20px auto;
 }
+
+@media screen and (max-width: 700px) {
+    .notification {
+        width: 95%;
+    }
+}

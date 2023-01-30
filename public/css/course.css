@@ -231,6 +231,7 @@ input[type="checkbox"] {
 
 .courseOwner img {
     width: 40px;
+    border-radius: 50%;
 }
 
 .courseOwner p {

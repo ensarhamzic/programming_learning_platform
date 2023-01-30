@@ -62,7 +62,7 @@ class ProfileController extends Controller
             $stringId = '0' . $stringId;
         }
         $user = User::findOrfail($stringId);
-        if (!$user->approved) abort(404);
+        if (!$user->approved || $user->isAdmin()) abort(404);
 
         return view('profile.show', compact('user'));
     }

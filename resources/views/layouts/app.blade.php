@@ -77,11 +77,9 @@
                         </li>
                         @endif
                         @else
-                        @if (!Auth::user()->isAdmin())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('profile.index') }}">My profile</a>
                         </li>
-                        @endif
                         @if (Auth::user()->isAdmin())
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.registrations.index') }}">Registration

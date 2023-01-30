@@ -27,9 +27,7 @@
   <div class="coursesList">
     <div class="coursesInfo">
       <h1>Teaching courses</h1>
-      @if ($user->courses->where('active', 1)->count() > 3)
       <a href="{{ route('profile.teachingCourses', $user->JMBG) }}">See all</a>
-      @endif
     </div>
     <div class="courses">
       @if ($user->courses->count() > 0)
@@ -56,9 +54,7 @@
   <div class="coursesList">
     <div class="coursesInfo">
       <h1>Attends courses</h1>
-      @if ($user->attends->count() > 3)
       <a href="{{ route('profile.attendingCourses', $user->JMBG) }}">See all</a>
-      @endif
     </div>
     <div class="courses">
       @if ($user->attends->count() > 0)

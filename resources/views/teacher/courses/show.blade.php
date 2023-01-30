@@ -186,7 +186,8 @@
   <div class="usersRating">
     <h3>Average course rating</h3>
     <div class="ratingDiv">
-      <span>{{ $course->ratings->avg('rating') ? $course->ratings->avg('rating') : 0 }}</span>
+      <span>{{ $course->ratings->avg('rating') ? number_format( $course->ratings->avg('rating'), 2, '.', '' ) : 0
+        }}</span>
       <div class="ratingStar star-hover">
         <x-star-icon />
       </div>

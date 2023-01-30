@@ -46,7 +46,7 @@
                 <select name="section" id="section" class="form-control @error('section') is-invalid @enderror">
                   @foreach ($course->sections as $section)
                   @if ($section->id == $content->section_id)
-                  <option value="{{ $section->id }}" checked>{{ $section->title }}</option>
+                  <option value="{{ $section->id }}" selected>{{ $section->title }}</option>
                   @else
                   <option value="{{ $section->id }}">{{ $section->title }}</option>
                   @endif

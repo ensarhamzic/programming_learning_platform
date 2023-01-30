@@ -14,6 +14,10 @@ class IndexController extends Controller
     {
         $notifications = Notification::where('created_at', '>=', now()->subWeek())->orderBy('created_at', 'desc')->get();
         $courses = Course::where('active', 1)->where('created_at', '>=', now()->subWeek())->where('active', true)->orderBy('created_at', 'desc')->get();
+
+        if ($courses->isEmpty()) {
+            $courses = Course::where('active', 1)->orderBy('created_at', 'desc')->take(5)->get();
+        }
         // get 5 best rated courses
         $bestRatedCourses = $courses->sortByDesc(function ($course, $key) {
             return $course->ratings->avg('rating');

@@ -292,7 +292,7 @@ class CoursesController extends Controller
             $contentSource = $request->link;
         } else {
             $file = $request->file('content');
-            $destinationPath = '/uploads';
+            $destinationPath = 'uploads';
             $filename = $file->getClientOriginalName();
             $file->move($destinationPath, $filename);
 
@@ -429,6 +429,14 @@ class CoursesController extends Controller
         ]);
 
 
+        $course = Course::findOrFail($courseId);
+        $sections = $course->sections()->get();
+
+        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
+        $content = Content::whereHas('section', function ($query) use ($sections) {
+            $query->whereIn('id', $sections->pluck('id'));
+        })->where('id', $contentId)->first();
+
         if ($request->content) {
             $file = $request->file('content');
             $destinationPath = 'uploads';
@@ -443,16 +451,8 @@ class CoursesController extends Controller
         } else if ($request->link) {
             $contentSource = $request->link;
         } else {
-            $contentSource = $request->source;
+            $contentSource = $content->source;
         }
-
-        $course = Course::findOrFail($courseId);
-        $sections = $course->sections()->get();
-
-        // find course which section_id is equal to one of the sections of the course and content_id is equal to the contentId
-        $content = Content::whereHas('section', function ($query) use ($sections) {
-            $query->whereIn('id', $sections->pluck('id'));
-        })->where('id', $contentId)->first();
 
         if (!Auth::user()->ownsCourse($course) || !$content) {
             return redirect()->back();

@@ -231,7 +231,8 @@ class ProfileController extends Controller
         $attends = $user->attends;
         $courses = [];
         foreach ($attends as $attend) {
-            $courses[] = $attend->course;
+            if ($attend->course->active)
+                $courses[] = $attend->course;
         }
         $courses = collect($courses);
 

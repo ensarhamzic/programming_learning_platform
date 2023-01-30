@@ -322,10 +322,11 @@ class CoursesController extends Controller
 
 
         $correctCheckAnswer = $request->checkQuestionAnswers[0];
+        $i = 0;
         foreach ($request->checkQuestionAnswers as $answer) {
             $checkQuestion->answers()->create([
                 'text' => $answer,
-                'is_correct' => $answer == $correctCheckAnswer,
+                'is_correct' => $i == 0 && $answer == $correctCheckAnswer,
             ]);
         }
 
@@ -338,10 +339,11 @@ class CoursesController extends Controller
         $easyQuestion->save();
 
         $correctEasyAnswer = $request->easyQuestionAnswers[0];
+        $i = 0;
         foreach ($request->easyQuestionAnswers as $answer) {
             $easyQuestion->answers()->create([
                 'text' => $answer,
-                'is_correct' => $answer == $correctEasyAnswer,
+                'is_correct' => $i == 0 && $answer == $correctEasyAnswer,
             ]);
         }
 
@@ -354,10 +356,11 @@ class CoursesController extends Controller
         $mediumQuestion->save();
 
         $correctMediumAnswer = $request->mediumQuestionAnswers[0];
+        $i = 0;
         foreach ($request->mediumQuestionAnswers as $answer) {
             $mediumQuestion->answers()->create([
                 'text' => $answer,
-                'is_correct' => $answer == $correctMediumAnswer,
+                'is_correct' => $i == 0 && $answer == $correctMediumAnswer,
             ]);
         }
 
@@ -370,10 +373,11 @@ class CoursesController extends Controller
         $hardQuestion->save();
 
         $correctHardAnswer = $request->hardQuestionAnswers[0];
+        $i = 0;
         foreach ($request->hardQuestionAnswers as $answer) {
             $hardQuestion->answers()->create([
                 'text' => $answer,
-                'is_correct' => $answer == $correctHardAnswer,
+                'is_correct' =>  $i == 0 && $answer == $correctHardAnswer,
             ]);
         }
 
@@ -475,7 +479,7 @@ class CoursesController extends Controller
         $correctCheckAnswer = $request->checkQuestionAnswers[0];
         for ($i = 0; $i < count($checkQuestionAnswers); $i++) {
             $checkQuestionAnswers[$i]->text = $request->checkQuestionAnswers[$i];
-            $checkQuestionAnswers[$i]->is_correct = $request->checkQuestionAnswers[$i] == $correctCheckAnswer;
+            $checkQuestionAnswers[$i]->is_correct = $request->checkQuestionAnswers[$i] == $correctCheckAnswer && $i == 0;
             $checkQuestionAnswers[$i]->save();
         }
 
@@ -487,7 +491,7 @@ class CoursesController extends Controller
         $correctEasyAnswer = $request->easyQuestionAnswers[0];
         for ($i = 0; $i < count($easyQuestionAnswers); $i++) {
             $easyQuestionAnswers[$i]->text = $request->easyQuestionAnswers[$i];
-            $easyQuestionAnswers[$i]->is_correct = $request->easyQuestionAnswers[$i] == $correctEasyAnswer;
+            $easyQuestionAnswers[$i]->is_correct = $request->easyQuestionAnswers[$i] == $correctEasyAnswer && $i == 0;
             $easyQuestionAnswers[$i]->save();
         }
 
@@ -499,7 +503,7 @@ class CoursesController extends Controller
         $correctMediumAnswer = $request->mediumQuestionAnswers[0];
         for ($i = 0; $i < count($mediumQuestionAnswers); $i++) {
             $mediumQuestionAnswers[$i]->text = $request->mediumQuestionAnswers[$i];
-            $mediumQuestionAnswers[$i]->is_correct = $request->mediumQuestionAnswers[$i] == $correctMediumAnswer;
+            $mediumQuestionAnswers[$i]->is_correct = $request->mediumQuestionAnswers[$i] == $correctMediumAnswer && $i == 0;
             $mediumQuestionAnswers[$i]->save();
         }
 
@@ -511,7 +515,7 @@ class CoursesController extends Controller
         $correctHardAnswer = $request->hardQuestionAnswers[0];
         for ($i = 0; $i < count($hardQuestionAnswers); $i++) {
             $hardQuestionAnswers[$i]->text = $request->hardQuestionAnswers[$i];
-            $hardQuestionAnswers[$i]->is_correct = $request->hardQuestionAnswers[$i] == $correctHardAnswer;
+            $hardQuestionAnswers[$i]->is_correct = $request->hardQuestionAnswers[$i] == $correctHardAnswer && $i == 0;
             $hardQuestionAnswers[$i]->save();
         }
 

@@ -38,7 +38,8 @@
       <div class="userImage">
         <img src="{{ $user->getProfilePicture() }}" alt="user image" class="userImage">
       </div>
-      <h2 class='admin_h2'>{{ $user->name }} {{ $user->surname }}</h2>
+      <h2 class='admin_h2'><a href="{{ route('profile.show', $user->JMBG) }}">{{ $user->name }} {{ $user->surname }}</a>
+      </h2>
       <p class='admin_p'>JMBG: {{ $user->JMBG }}</p>
       <p class='admin_p'>username: {{ $user->username }}</p>
       <p class='admin_p'>email: {{ $user->email }}</p>

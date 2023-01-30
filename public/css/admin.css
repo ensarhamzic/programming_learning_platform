@@ -27,6 +27,17 @@
     text-align: center;
 }
 
+.admin_h2 a,
+.admin_h2 a:link,
+.admin_h2 a:visited {
+    color: #fff;
+    transition: 0.2s;
+}
+
+.admin_h2 a:hover {
+    color: rgb(255, 255, 255, 0.5);
+}
+
 .usersList,
 .notificationsList {
     margin-top: 50px;

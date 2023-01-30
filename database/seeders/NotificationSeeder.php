@@ -15,19 +15,19 @@ class NotificationSeeder extends Seeder
      */
     public function run()
     {
-        Notification::create([
-            'title' => 'Welcome to the site',
-            'message' => 'Welcome to the site',
-        ]);
+        // Notification::create([
+        //     'title' => 'Welcome to the site',
+        //     'message' => 'Welcome to the site',
+        // ]);
 
-        Notification::create([
-            'title' => 'Welcome to the site 2',
-            'message' => 'Welcome to the site 2',
-        ]);
+        // Notification::create([
+        //     'title' => 'Welcome to the site 2',
+        //     'message' => 'Welcome to the site 2',
+        // ]);
 
-        Notification::create([
-            'title' => 'Welcome to the site 3',
-            'message' => 'Welcome to the site 3',
-        ]);
+        // Notification::create([
+        //     'title' => 'Welcome to the site 3',
+        //     'message' => 'Welcome to the site 3',
+        // ]);
     }
 }

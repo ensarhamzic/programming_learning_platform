@@ -175,7 +175,7 @@ class ProfileController extends Controller
         $user->birth_place = $request->birth_place;
         $user->birth_country = $request->birth_country;
         $user->birth_date = $request->birth_date;
-        if ($image_uploaded == "") {
+        if ($image_uploaded === "") {
             $user->profile_picture = $image_uploaded;
         } else
             $user->profile_picture = $image_uploaded ? $image_uploaded : $user->profile_picture;

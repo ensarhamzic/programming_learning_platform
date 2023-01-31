@@ -87,7 +87,7 @@ class CoursesController extends Controller
     public function show($id)
     {
         $course = Course::findOrFail($id);
-        if (!$course->active) abort(404);
+        if ((!$course->active && Auth::check() && !Auth::user()->ownsCourse($course)) || (!$course->active && !Auth::check())) abort(404);
         $userRating = null;
         if (Auth::check())
             $userRating = Rating::where('course_id', $id)->where('user_JMBG', auth()->user()->JMBG)->first();

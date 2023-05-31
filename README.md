@@ -5,3 +5,12 @@ AsyncLearners is a Laravel application that enables instructors to create course
 Technologies:
 - Laravel
 - MySQL
+
+### Home Page
+![Home Page](https://github.com/ensarhamzic/programming_learning_platform/blob/main/readme-assets/home.png)
+
+### Course Page
+![Course Page](https://github.com/ensarhamzic/programming_learning_platform/blob/main/readme-assets/course.png)
+
+### Course Materials (student's screen)
+![Course Materials](https://github.com/ensarhamzic/programming_learning_platform/blob/main/readme-assets/student-material.png)
